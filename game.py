@@ -3,6 +3,7 @@
 import json
 import pygame
 import sys
+import xbox360_controller
 
 pygame.mixer.pre_init()
 pygame.init()
@@ -21,6 +22,8 @@ sound_on = True
 LEFT = pygame.K_LEFT
 RIGHT = pygame.K_RIGHT
 JUMP = pygame.K_SPACE
+
+gamepad = xbox360_controller.Controller(0)
 
 # Levels
 levels = ["levels/world-1.json",
@@ -677,12 +680,14 @@ class Game():
                     if event.key == pygame.K_r:
                         self.reset()
 
-        pressed = pygame.key.get_pressed()
+        #pressed = pygame.key.get_pressed()
+        pressed = gamepad.get_buttons()
+        pad_up, pad_right, pad_down, pad_left = gamepad.get_pad()
 
         if self.stage == Game.PLAYING:
-            if pressed[LEFT]:
+            if pad_left:
                 self.hero.move_left()
-            elif pressed[RIGHT]:
+            elif pad_right:
                 self.hero.move_right()
             else:
                 self.hero.stop()
