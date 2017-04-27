@@ -23,8 +23,6 @@ LEFT = pygame.K_LEFT
 RIGHT = pygame.K_RIGHT
 JUMP = pygame.K_SPACE
 
-gamepad = xbox360_controller.Controller(0)
-
 # Levels
 levels = ["levels/world-1.json",
           "levels/world-2.json",
@@ -657,10 +655,34 @@ class Game():
         surface.blit(lives_text, (32, 64))
 
     def process_events(self):
+        try:
+            gamepad = xbox360_controller.Controller(0)
+            left_x, left_y = gamepad.get_left_stick()
+            right_x, right_y = gamepad.get_right_stick()
+        except:
+            gamepad = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.done = True
+            if gamepad:
+                if event.type == pygame.JOYBUTTONDOWN:
+                    if self.stage == Game.SPLASH or self.stage == Game.START:
+                        self.stage = Game.PLAYING
+                        play_music()
 
+                    elif self.stage == Game.PLAYING:
+                        if event.button == xbox360_controller.A:
+                            self.hero.jump(self.level.blocks)
+
+                    elif self.stage == Game.PAUSED:
+                        pass
+
+                    elif self.stage == Game.LEVEL_COMPLETED:
+                        self.advance()
+
+                    elif self.stage == Game.VICTORY or self.stage == Game.GAME_OVER:
+                        if event.button == xbox360_controller.A:
+                            self.reset()
             elif event.type == pygame.KEYDOWN:
                 if self.stage == Game.SPLASH or self.stage == Game.START:
                     self.stage = Game.PLAYING
@@ -679,18 +701,23 @@ class Game():
                 elif self.stage == Game.VICTORY or self.stage == Game.GAME_OVER:
                     if event.key == pygame.K_r:
                         self.reset()
-
-        #pressed = pygame.key.get_pressed()
-        pressed = gamepad.get_buttons()
-        pad_up, pad_right, pad_down, pad_left = gamepad.get_pad()
-
-        if self.stage == Game.PLAYING:
-            if pad_left:
-                self.hero.move_left()
-            elif pad_right:
-                self.hero.move_right()
-            else:
-                self.hero.stop()
+        if gamepad:
+            if self.stage == Game.PLAYING:
+                if left_x < 0:
+                    self.hero.move_left()
+                elif left_x > 0:
+                    self.hero.move_right()
+                else:
+                    self.hero.stop()
+        else:
+            pressed = pygame.key.get_pressed()
+            if self.stage == Game.PLAYING:
+                if pressed[LEFT]:
+                    self.hero.move_left()
+                elif pressed[RIGHT]:
+                    self.hero.move_right()
+                else:
+                    self.hero.stop()
 
     def update(self):
         if self.stage == Game.PLAYING:
