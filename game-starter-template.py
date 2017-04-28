@@ -105,6 +105,7 @@ class Character(Entity):
         self.rect.x += self.vx
         self.rect.y += self.vy
 
+
 class Coin():
     pass
 
@@ -147,7 +148,7 @@ class Game():
 
             self.hero.update()
 
-            #Drawing
+            # Drawing
             window.fill(SKY_BLUE)
             self.all_sprites.draw(window)
 
@@ -156,7 +157,8 @@ class Game():
             clock.tick(FPS)
 
         # Close window on quit
-        pygame.quit ()
+        pygame.quit()
+
 
 def main():
     # Make sprites
@@ -178,6 +180,7 @@ def main():
     # Start game
     game = Game(hero, blocks)
     game.play()
+
 
 if __name__ == "__main__":
     main()

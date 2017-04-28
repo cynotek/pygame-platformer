@@ -32,7 +32,6 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
-            
 
     # Drawing code
     screen.fill(WHITE)
@@ -43,12 +42,10 @@ while not done:
     for y in range(0, HEIGHT, 32):
         pygame.draw.line(screen, GRAY, [0, y], [WIDTH, y], 1)
 
-
     # Update screen (Actually draw the picture in the window.)
     pygame.display.flip()
 
-
-    # Limit refresh rate of game loop 
+    # Limit refresh rate of game loop
     clock.tick(refresh_rate)
 
 
