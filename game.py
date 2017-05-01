@@ -39,11 +39,14 @@ FONT_MD = pygame.font.Font("assets/fonts/minya_nouvelle_bd.ttf", 64)
 FONT_LG = pygame.font.Font("assets/fonts/thats_super.ttf", 72)
 
 # Helper functions
+
+
 def load_image(file_path):
     img = pygame.image.load(file_path)
     img = pygame.transform.scale(img, (GRID_SIZE, GRID_SIZE))
 
     return img
+
 
 def play_sound(sound, loops=0, maxtime=0, fade_ms=0):
     if sound_on:
@@ -52,11 +55,14 @@ def play_sound(sound, loops=0, maxtime=0, fade_ms=0):
         else:
             sound.play(loops, maxtime, fade_ms)
 
+
 def play_music():
     if sound_on:
         pygame.mixer.music.play(-1)
 
 # Images
+
+
 hero_walk1 = load_image("assets/character/adventurer_walk1.png")
 hero_walk2 = load_image("assets/character/adventurer_walk2.png")
 hero_jump = load_image("assets/character/adventurer_jump.png")
@@ -97,6 +103,7 @@ DIE_SOUND = pygame.mixer.Sound("assets/sounds/death.wav")
 LEVELUP_SOUND = pygame.mixer.Sound("assets/sounds/level_up.wav")
 GAMEOVER_SOUND = pygame.mixer.Sound("assets/sounds/game_over.wav")
 
+
 class Entity(pygame.sprite.Sprite):
 
     def __init__(self, x, y, image):
@@ -114,10 +121,12 @@ class Entity(pygame.sprite.Sprite):
         self.vy += level.gravity
         self.vy = min(self.vy, level.terminal_velocity)
 
+
 class Block(Entity):
 
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
+
 
 class Character(Entity):
 
@@ -238,7 +247,7 @@ class Character(Entity):
                 else:
                     self.running_images = self.images_run_left
 
-                self.steps = (self.steps + 1) % self.speed # Works well with 2 images, try lower number if more frames are in animation
+                self.steps = (self.steps + 1) % self.speed  # Works well with 2 images, try lower number if more frames are in animation
 
                 if self.steps == 0:
                     self.image_index = (self.image_index + 1) % len(self.running_images)
@@ -282,11 +291,13 @@ class Character(Entity):
         else:
             self.die()
 
+
 class Coin(Entity):
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
         self.value = 1
+
 
 class Enemy(Entity):
     def __init__(self, x, y, images):
@@ -324,7 +335,7 @@ class Enemy(Entity):
             self.image = self.current_images[self.image_index]
             self.image_index = (self.image_index + 1) % len(self.current_images)
 
-        self.steps = (self.steps + 1) % 20 # Nothing significant about 20. It just seems to work okay.
+        self.steps = (self.steps + 1) % 20  # Nothing significant about 20. It just seems to work okay.
 
     def is_near(self, hero):
         return abs(self.rect.x - hero.rect.x) < 2 * WIDTH
@@ -343,6 +354,7 @@ class Enemy(Entity):
         self.vy = self.start_vy
         self.image = self.images_left[0]
         self.steps = 0
+
 
 class Bear(Enemy):
     def __init__(self, x, y, images):
@@ -378,6 +390,7 @@ class Bear(Enemy):
             elif self.vy < 0:
                 self.rect.top = block.rect.bottom
                 self.vy = 0
+
 
 class Monster(Enemy):
     def __init__(self, x, y, images):
@@ -428,12 +441,14 @@ class Monster(Enemy):
         if reverse:
             self.reverse()
 
+
 class OneUp(Entity):
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
     def apply(self, character):
         character.lives += 1
+
 
 class Heart(Entity):
     def __init__(self, x, y, image):
@@ -443,9 +458,11 @@ class Heart(Entity):
         character.hearts += 1
         character.hearts = max(character.hearts, character.max_hearts)
 
+
 class Flag(Entity):
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
+
 
 class Level():
 
@@ -585,6 +602,7 @@ class Level():
         for e in self.enemies:
             e.reset()
 
+
 class Game():
 
     SPLASH = 0
@@ -623,11 +641,11 @@ class Game():
         line1 = FONT_LG.render(TITLE, 1, DARK_BLUE)
         line2 = FONT_SM.render("Press any key to start.", 1, WHITE)
 
-        x1 = WIDTH / 2 - line1.get_width() / 2;
-        y1 = HEIGHT / 3 - line1.get_height() / 2;
+        x1 = WIDTH / 2 - line1.get_width() / 2
+        y1 = HEIGHT / 3 - line1.get_height() / 2
 
-        x2 = WIDTH / 2 - line2.get_width() / 2;
-        y2 = y1 + line1.get_height() + 16;
+        x2 = WIDTH / 2 - line2.get_width() / 2
+        y2 = y1 + line1.get_height() + 16
 
         surface.blit(line1, (x1, y1))
         surface.blit(line2, (x2, y2))
@@ -636,11 +654,11 @@ class Game():
         line1 = FONT_MD.render(primary_text, 1, WHITE)
         line2 = FONT_SM.render(secondary_text, 1, WHITE)
 
-        x1 = WIDTH / 2 - line1.get_width() / 2;
-        y1 = HEIGHT / 3 - line1.get_height() / 2;
+        x1 = WIDTH / 2 - line1.get_width() / 2
+        y1 = HEIGHT / 3 - line1.get_height() / 2
 
-        x2 = WIDTH / 2 - line2.get_width() / 2;
-        y2 = y1 + line1.get_height() + 16;
+        x2 = WIDTH / 2 - line2.get_width() / 2
+        y2 = y1 + line1.get_height() + 16
 
         surface.blit(line1, (x1, y1))
         surface.blit(line2, (x2, y2))
@@ -786,6 +804,7 @@ class Game():
             self.update()
             self.draw()
             self.clock.tick(FPS)
+
 
 if __name__ == "__main__":
     game = Game()
