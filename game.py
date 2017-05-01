@@ -9,7 +9,7 @@ pygame.mixer.pre_init()
 pygame.init()
 
 # Window settings
-TITLE = "Name of Game"
+TITLE = "Generic platformers"
 WIDTH = 960
 HEIGHT = 640
 FPS = 60
@@ -19,8 +19,8 @@ GRID_SIZE = 64
 sound_on = True
 
 # Controls
-LEFT = pygame.K_LEFT
-RIGHT = pygame.K_RIGHT
+LEFT = pygame.K_a
+RIGHT = pygame.K_d
 JUMP = pygame.K_SPACE
 
 # Levels
@@ -646,7 +646,7 @@ class Game():
         surface.blit(line2, (x2, y2))
 
     def display_stats(self, surface):
-        hearts_text = FONT_SM.render("Hearts: " + str(self.hero.hearts), 1, WHITE)
+        hearts_text = FONT_SM.render("Hearts: {}/{}".format(self.hero.hearts, self.hero.max_hearts), 1, WHITE)
         lives_text = FONT_SM.render("Lives: " + str(self.hero.lives), 1, WHITE)
         score_text = FONT_SM.render("Score: " + str(self.hero.score), 1, WHITE)
 
