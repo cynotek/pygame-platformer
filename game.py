@@ -133,7 +133,8 @@ class Character(Entity):
     def __init__(self, images):
         super().__init__(0, 0, images['idle'])
 
-        self.image_idle = images['idle']
+        self.image_idle_right = images['idle']
+        self.image_idle_left = pygame.transform.flip(self.image_idle_right, 1, 0)
         self.images_run_right = images['run']
         self.images_run_left = [pygame.transform.flip(img, 1, 0) for img in self.images_run_right]
         self.image_jump_right = images['jump']
@@ -253,7 +254,10 @@ class Character(Entity):
                     self.image_index = (self.image_index + 1) % len(self.running_images)
                     self.image = self.running_images[self.image_index]
             else:
-                self.image = self.image_idle
+                if self.facing_right:
+                    self.image = self.image_idle_right
+                else:
+                    self.image = self.image_idle_left
         else:
             if self.facing_right:
                 self.image = self.image_jump_right
@@ -273,6 +277,7 @@ class Character(Entity):
         self.rect.y = level.start_y
         self.hearts = self.max_hearts
         self.invincibility = 0
+        self.facing_right = True
 
     def update(self, level):
         self.process_enemies(level.enemies)
@@ -352,7 +357,8 @@ class Enemy(Entity):
         self.rect.y = self.start_y
         self.vx = self.start_vx
         self.vy = self.start_vy
-        self.image = self.images_left[0]
+        self.current_images = self.images_left
+        self.image = self.current_images[0]
         self.steps = 0
 
 
