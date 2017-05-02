@@ -18,10 +18,18 @@ GRID_SIZE = 64
 # Options
 sound_on = True
 
-# Controls
+# KB+M
 LEFT = pygame.K_a
 RIGHT = pygame.K_d
 JUMP = pygame.K_SPACE
+
+# Controller
+try:
+    gamepad = xbox360_controller.Controller(0)
+    left_x, left_y = gamepad.get_left_stick()
+    right_x, right_y = gamepad.get_right_stick()
+except:
+    gamepad = False
 
 # Levels
 levels = ["levels/world-1.json",
@@ -67,9 +75,11 @@ hero_walk1 = load_image("assets/character/adventurer_walk1.png")
 hero_walk2 = load_image("assets/character/adventurer_walk2.png")
 hero_jump = load_image("assets/character/adventurer_jump.png")
 hero_idle = load_image("assets/character/adventurer_idle.png")
+hero_fall = load_image("assets/character/adventurer_fall.png")
 hero_images = {"run": [hero_walk1, hero_walk2],
                "jump": hero_jump,
-               "idle": hero_idle}
+               "idle": hero_idle,
+               "fall": hero_fall}
 
 block_images = {"TL": load_image("assets/tiles/top_left.png"),
                 "TM": load_image("assets/tiles/top_middle.png"),
@@ -679,12 +689,6 @@ class Game():
         surface.blit(lives_text, (32, 64))
 
     def process_events(self):
-        try:
-            gamepad = xbox360_controller.Controller(0)
-            left_x, left_y = gamepad.get_left_stick()
-            right_x, right_y = gamepad.get_right_stick()
-        except:
-            gamepad = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.done = True
