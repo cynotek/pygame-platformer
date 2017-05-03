@@ -29,7 +29,7 @@ try:
     left_x, left_y = gamepad.get_left_stick()
     right_x, right_y = gamepad.get_right_stick()
 except:
-    gamepad = False
+    gamepad = None
 
 # Levels
 levels = ["levels/world-1.json",
@@ -55,6 +55,12 @@ def load_image(file_path):
 
     return img
 
+def load_char(file_path):
+    img = pygame.image.load(file_path)
+    img = pygame.transform.scale(img, (GRID_SIZE, GRID_SIZE * 2))
+
+    return img
+
 
 def play_sound(sound, loops=0, maxtime=0, fade_ms=0):
     if sound_on:
@@ -71,15 +77,15 @@ def play_music():
 # Images
 
 
-hero_walk1 = load_image("assets/character/adventurer_walk1.png")
-hero_walk2 = load_image("assets/character/adventurer_walk2.png")
-hero_jump = load_image("assets/character/adventurer_jump.png")
-hero_idle = load_image("assets/character/adventurer_idle.png")
-hero_fall = load_image("assets/character/adventurer_fall.png")
-hero_images = {"run": [hero_walk1, hero_walk2],
-               "jump": hero_jump,
-               "idle": hero_idle,
-               "fall": hero_fall}
+alien_walk1 = load_char("assets/Players/128x256/Blue/alienBlue_walk1.png")
+alien_walk2 = load_char("assets/Players/128x256/Blue/alienBlue_walk2.png")
+alien_jump = load_char("assets/Players/128x256/Blue/alienBlue_jump.png")
+alien_stand = load_char("assets/Players/128x256/Blue/alienBlue_stand.png")
+alien_fall = load_char("assets/character/adventurer_hit.png")
+alien_images = {"run": [alien_walk1, alien_walk2],
+               "jump": alien_jump,
+               "stand": alien_stand,
+               "hit": alien_hit}
 
 block_images = {"TL": load_image("assets/tiles/top_left.png"),
                 "TM": load_image("assets/tiles/top_middle.png"),
@@ -141,15 +147,17 @@ class Block(Entity):
 class Character(Entity):
 
     def __init__(self, images):
-        super().__init__(0, 0, images['idle'])
+        super().__init__(0, 0, images['stand'])
 
-        self.image_idle_right = images['idle']
+        self.image_idle_right = images['stand']
         self.image_idle_left = pygame.transform.flip(self.image_idle_right, 1, 0)
         self.images_run_right = images['run']
         self.images_run_left = [pygame.transform.flip(img, 1, 0) for img in self.images_run_right]
         self.image_jump_right = images['jump']
         self.image_jump_left = pygame.transform.flip(self.image_jump_right, 1, 0)
-
+        self.image_fall_right = images['hit']
+        self.image_fall_left = pygame.transform.flip(self.image_fall_right, 1, 0)
+        
         self.running_images = self.images_run_right
         self.image_index = 0
         self.steps = 0
@@ -269,7 +277,12 @@ class Character(Entity):
                 else:
                     self.image = self.image_idle_left
         else:
-            if self.facing_right:
+            if self.vy > 0:
+                if self.facing_right:
+                    self.image = self.image_fall_right
+                else:
+                    self.image = self.image_fall_left
+            elif self.facing_right:
                 self.image = self.image_jump_right
             else:
                 self.image = self.image_jump_left
