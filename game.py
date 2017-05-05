@@ -42,9 +42,9 @@ DARK_BLUE = (16, 86, 103)
 WHITE = (255, 255, 255)
 
 # Fonts
-FONT_SM = pygame.font.Font("assets/fonts/minya_nouvelle_bd.ttf", 32)
-FONT_MD = pygame.font.Font("assets/fonts/minya_nouvelle_bd.ttf", 64)
-FONT_LG = pygame.font.Font("assets/fonts/thats_super.ttf", 72)
+FONT_SM = pygame.font.Font("fonts/kenpixel.ttf", 32)
+FONT_MD = pygame.font.Font("fonts/kenpixel.ttf", 64)
+FONT_LG = pygame.font.Font("fonts/kenpixel.ttf", 72)
 
 # Helper functions
 
@@ -81,43 +81,42 @@ alien_walk1 = load_char("assets/Players/128x256/Blue/alienBlue_walk1.png")
 alien_walk2 = load_char("assets/Players/128x256/Blue/alienBlue_walk2.png")
 alien_jump = load_char("assets/Players/128x256/Blue/alienBlue_jump.png")
 alien_stand = load_char("assets/Players/128x256/Blue/alienBlue_stand.png")
-alien_fall = load_char("assets/character/adventurer_hit.png")
+alien_hit = load_char("assets/Players/128x256/Blue/alienBlue_hit.png")
 alien_images = {"run": [alien_walk1, alien_walk2],
                "jump": alien_jump,
                "stand": alien_stand,
                "hit": alien_hit}
 
-block_images = {"TL": load_image("assets/tiles/top_left.png"),
-                "TM": load_image("assets/tiles/top_middle.png"),
-                "TR": load_image("assets/tiles/top_right.png"),
-                "ER": load_image("assets/tiles/end_right.png"),
-                "EL": load_image("assets/tiles/end_left.png"),
-                "TP": load_image("assets/tiles/top.png"),
-                "CN": load_image("assets/tiles/center.png"),
-                "LF": load_image("assets/tiles/lone_float.png"),
-                "SP": load_image("assets/tiles/special.png")}
+block_images = {"GL": load_image("assets/Ground/Grass/grassLeft.png"),
+                "GM": load_image("assets/Ground/Grass/grassMid.png"),
+                "GCR": load_image("assets/Ground/Grass/grassCliff_right.png"),
+                "GR": load_image("assets/Ground/Grass/grassRight.png"),
+                "GCL": load_image("assets/Ground/Grass/grassLeft.png"),
+                "G": load_image("assets/Ground/Grass/grass.png"),
+                "GC": load_image("assets/Ground/Grass/grassCenter.png"),
+                "GC": load_image("assets/Ground/Grass/grassCenter.png")}
 
-coin_img = load_image("assets/items/coin.png")
-heart_img = load_image("assets/items/bandaid.png")
-oneup_img = load_image("assets/items/first_aid.png")
-flag_img = load_image("assets/items/flag.png")
-flagpole_img = load_image("assets/items/flagpole.png")
+coin_img = load_image("assets/Items/coinGold.png")
+heart_img = load_image("assets/HUD/hudHeart_full.png")
+oneup_img = load_image("assets/HUD/hudHeart_full.png")
+flag_img = load_image("assets/Items/flagBlue1.png")
+flagpole_img = load_image("assets/Items/flagBlue1.png")
 
-monster_img1 = load_image("assets/enemies/monster-1.png")
-monster_img2 = load_image("assets/enemies/monster-2.png")
+monster_img1 = load_image("assets/Enemies/bee.png")
+monster_img2 = load_image("assets/Enemies/bee_move.png")
 monster_images = [monster_img1, monster_img2]
 
-bear_img = load_image("assets/enemies/bear-1.png")
+bear_img = load_image("assets/enemies/mouse.png")
 bear_images = [bear_img]
 
 # Sounds
-JUMP_SOUND = pygame.mixer.Sound("assets/sounds/jump.wav")
-COIN_SOUND = pygame.mixer.Sound("assets/sounds/pickup_coin.wav")
-POWERUP_SOUND = pygame.mixer.Sound("assets/sounds/powerup.wav")
-HURT_SOUND = pygame.mixer.Sound("assets/sounds/hurt.ogg")
-DIE_SOUND = pygame.mixer.Sound("assets/sounds/death.wav")
-LEVELUP_SOUND = pygame.mixer.Sound("assets/sounds/level_up.wav")
-GAMEOVER_SOUND = pygame.mixer.Sound("assets/sounds/game_over.wav")
+#JUMP_SOUND = pygame.mixer.Sound("assets/sounds/jump.wav")
+#COIN_SOUND = pygame.mixer.Sound("assets/sounds/pickup_coin.wav")
+#POWERUP_SOUND = pygame.mixer.Sound("assets/sounds/powerup.wav")
+#HURT_SOUND = pygame.mixer.Sound("assets/sounds/hurt.ogg")
+#DIE_SOUND = pygame.mixer.Sound("assets/sounds/death.wav")
+#LEVELUP_SOUND = pygame.mixer.Sound("assets/sounds/level_up.wav")
+#GAMEOVER_SOUND = pygame.mixer.Sound("assets/sounds/game_over.wav")
 
 
 class Entity(pygame.sprite.Sprite):
@@ -194,7 +193,7 @@ class Character(Entity):
 
         if len(hit_list) > 0:
             self.vy = -1 * self.jump_power
-            play_sound(JUMP_SOUND)
+            #play_sound(JUMP_SOUND)
 
         self.rect.y -= 1
 
@@ -233,14 +232,14 @@ class Character(Entity):
         hit_list = pygame.sprite.spritecollide(self, coins, True)
 
         for coin in hit_list:
-            play_sound(COIN_SOUND)
+            #play_sound(COIN_SOUND)
             self.score += coin.value
 
     def process_enemies(self, enemies):
         hit_list = pygame.sprite.spritecollide(self, enemies, False)
 
         if len(hit_list) > 0 and self.invincibility == 0:
-            play_sound(HURT_SOUND)
+            #play_sound(HURT_SOUND)
             self.hearts -= 1
             self.invincibility = int(0.75 * FPS)
 
@@ -248,7 +247,7 @@ class Character(Entity):
         hit_list = pygame.sprite.spritecollide(self, powerups, True)
 
         for p in hit_list:
-            play_sound(POWERUP_SOUND)
+            #play_sound(POWERUP_SOUND)
             p.apply(self)
 
     def check_flag(self, level):
@@ -256,7 +255,7 @@ class Character(Entity):
 
         if len(hit_list) > 0:
             level.completed = True
-            play_sound(LEVELUP_SOUND)
+            #play_sound(LEVELUP_SOUND)
 
     def set_image(self):
         if self.on_ground:
@@ -291,9 +290,11 @@ class Character(Entity):
         self.lives -= 1
 
         if self.lives > 0:
-            play_sound(DIE_SOUND)
+            pass
+            #play_sound(DIE_SOUND)
         else:
-            play_sound(GAMEOVER_SOUND)
+            pass
+            #play_sound(GAMEOVER_SOUND)
 
     def respawn(self, level):
         self.rect.x = level.start_x
@@ -603,7 +604,7 @@ class Level():
             else:
                 self.scenery_layer.blit(scenery_img, [0, start_y])
 
-        pygame.mixer.music.load(map_data['music'])
+        #pygame.mixer.music.load(map_data['music'])
 
         self.gravity = map_data['gravity']
         self.terminal_velocity = map_data['terminal-velocity']
@@ -661,7 +662,7 @@ class Game():
         self.stage = Game.START
 
     def reset(self):
-        self.hero = Character(hero_images)
+        self.hero = Character(alien_images)
         self.current_level = 0
         self.start()
         self.stage = Game.SPLASH
@@ -709,7 +710,7 @@ class Game():
                 if event.type == pygame.JOYBUTTONDOWN:
                     if self.stage == Game.SPLASH or self.stage == Game.START:
                         self.stage = Game.PLAYING
-                        play_music()
+                        #play_music()
 
                     elif self.stage == Game.PLAYING:
                         if event.button == xbox360_controller.A:
@@ -727,7 +728,7 @@ class Game():
             elif event.type == pygame.KEYDOWN:
                 if self.stage == Game.SPLASH or self.stage == Game.START:
                     self.stage = Game.PLAYING
-                    play_music()
+                    #play_music()
 
                 elif self.stage == Game.PLAYING:
                     if event.key == JUMP:
@@ -770,11 +771,11 @@ class Game():
                 self.stage = Game.LEVEL_COMPLETED
             else:
                 self.stage = Game.VICTORY
-            pygame.mixer.music.stop()
+            #pygame.mixer.music.stop()
 
         elif self.hero.lives == 0:
             self.stage = Game.GAME_OVER
-            pygame.mixer.music.stop()
+            #pygame.mixer.music.stop()
 
         elif self.hero.hearts == 0:
             self.level.reset()
