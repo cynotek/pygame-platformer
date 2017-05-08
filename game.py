@@ -314,6 +314,8 @@ class Character(Entity):
             self.process_coins(level.coins)
             self.process_powerups(level.powerups)
             self.check_flag(level)
+            if self.hearts > self.max_hearts:
+                self.hearts = self.max_hearts
 
             if self.invincibility > 0:
                 self.invincibility -= 1
