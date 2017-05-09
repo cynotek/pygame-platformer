@@ -9,7 +9,7 @@ pygame.mixer.pre_init()
 pygame.init()
 
 # Window settings
-TITLE = "Generic platformers"
+TITLE = "Alien"
 WIDTH = 960
 HEIGHT = 640
 FPS = 60
@@ -708,7 +708,7 @@ class Game():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.done = True
-            if gamepad:
+            if gamepad is not None:
                 if event.type == pygame.JOYBUTTONDOWN:
                     if self.stage == Game.SPLASH or self.stage == Game.START:
                         self.stage = Game.PLAYING
@@ -745,7 +745,7 @@ class Game():
                 elif self.stage == Game.VICTORY or self.stage == Game.GAME_OVER:
                     if event.key == pygame.K_r:
                         self.reset()
-        if gamepad:
+        if gamepad is not None:
             if self.stage == Game.PLAYING:
                 if left_x < 0:
                     self.hero.move_left()
