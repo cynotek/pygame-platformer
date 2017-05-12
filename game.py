@@ -642,6 +642,11 @@ class Game():
         pygame.display.set_caption(TITLE)
         self.clock = pygame.time.Clock()
         self.done = False
+        # Controller
+        try:
+            self.gamepad = xbox360_controller.Controller(0)
+        except:
+            self.gamepad = None
 
         self.reset()
 
@@ -697,16 +702,10 @@ class Game():
         surface.blit(lives_text, (32, 64))
 
     def process_events(self):
-        try:
-            gamepad = xbox360_controller.Controller(0)
-            left_x, left_y = gamepad.get_left_stick()
-            right_x, right_y = gamepad.get_right_stick()
-        except:
-            gamepad = None
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.done = True
-            if gamepad:
+            if self.gamepad:
                 if event.type == pygame.JOYBUTTONDOWN:
                     if self.stage == Game.SPLASH or self.stage == Game.START:
                         self.stage = Game.PLAYING
@@ -725,7 +724,7 @@ class Game():
                     elif self.stage == Game.VICTORY or self.stage == Game.GAME_OVER:
                         if event.button == xbox360_controller.A:
                             self.reset()
-            elif event.type == pygame.KEYDOWN:
+            elif event.type == pygame.KEYDOWN and self.gamepad is None:
                 if self.stage == Game.SPLASH or self.stage == Game.START:
                     self.stage = Game.PLAYING
                     #play_music()
@@ -743,15 +742,18 @@ class Game():
                 elif self.stage == Game.VICTORY or self.stage == Game.GAME_OVER:
                     if event.key == pygame.K_r:
                         self.reset()
-        if gamepad:
+
+        if self.gamepad:
+            self.left_x, self.left_y = self.gamepad.get_left_stick()
+            self.right_x, self.right_y = self.gamepad.get_right_stick()
             if self.stage == Game.PLAYING:
-                if left_x < 0:
+                if self.left_x < 0:
                     self.hero.move_left()
-                elif left_x > 0:
+                elif self.left_x > 0:
                     self.hero.move_right()
                 else:
                     self.hero.stop()
-        else:
+        elif self.gamepad is None:
             pressed = pygame.key.get_pressed()
             if self.stage == Game.PLAYING:
                 if pressed[LEFT]:
