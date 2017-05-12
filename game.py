@@ -23,14 +23,6 @@ LEFT = pygame.K_a
 RIGHT = pygame.K_d
 JUMP = pygame.K_SPACE
 
-# Controller
-try:
-    gamepad = xbox360_controller.Controller(0)
-    left_x, left_y = gamepad.get_left_stick()
-    right_x, right_y = gamepad.get_right_stick()
-except:
-    gamepad = None
-
 # Levels
 levels = ["levels/world-1.json",
           "levels/world-2.json",
@@ -98,7 +90,7 @@ block_images = {"GL": load_image("assets/Ground/Grass/grassLeft.png"),
 
 coin_img = load_image("assets/Items/coinGold.png")
 heart_img = load_image("assets/HUD/hudHeart_full.png")
-oneup_img = load_image("assets/HUD/hudHeart_full.png")
+oneup_img = load_image("assets/Tiles/mushroomRed.png")
 flag_img = load_image("assets/Items/flagBlue1.png")
 flagpole_img = load_image("assets/Items/flagBlue1.png")
 
@@ -154,8 +146,8 @@ class Character(Entity):
         self.images_run_left = [pygame.transform.flip(img, 1, 0) for img in self.images_run_right]
         self.image_jump_right = images['jump']
         self.image_jump_left = pygame.transform.flip(self.image_jump_right, 1, 0)
-        self.image_fall_right = images['hit']
-        self.image_fall_left = pygame.transform.flip(self.image_fall_right, 1, 0)
+        self.image_hit_right = images['hit']
+        self.image_hit_left = pygame.transform.flip(self.image_hit_right, 1, 0)
         
         self.running_images = self.images_run_right
         self.image_index = 0
@@ -192,7 +184,7 @@ class Character(Entity):
         hit_list = pygame.sprite.spritecollide(self, blocks, False)
 
         if len(hit_list) > 0:
-            self.vy = -1 * self.jump_power
+            self.vy = -self.jump_power
             #play_sound(JUMP_SOUND)
 
         self.rect.y -= 1
@@ -239,7 +231,15 @@ class Character(Entity):
         hit_list = pygame.sprite.spritecollide(self, enemies, False)
 
         if len(hit_list) > 0 and self.invincibility == 0:
+            if self.vy > 0:
+                [e.kill() for e in hit_list]
+                self.vy = -self.jump_power
+                return
             #play_sound(HURT_SOUND)
+            if self.vx > 0: # right facing hit
+                self.rect.x += -self.jump_power
+            elif self.vx < 0: # left facing hit
+                self.rect.x += self.jump_power
             self.hearts -= 1
             self.invincibility = int(0.75 * FPS)
 
@@ -276,12 +276,7 @@ class Character(Entity):
                 else:
                     self.image = self.image_idle_left
         else:
-            if self.vy > 0:
-                if self.facing_right:
-                    self.image = self.image_fall_right
-                else:
-                    self.image = self.image_fall_left
-            elif self.facing_right:
+            if self.facing_right:
                 self.image = self.image_jump_right
             else:
                 self.image = self.image_jump_left
@@ -314,8 +309,6 @@ class Character(Entity):
             self.process_coins(level.coins)
             self.process_powerups(level.powerups)
             self.check_flag(level)
-            if self.hearts > self.max_hearts:
-                self.hearts = self.max_hearts
 
             if self.invincibility > 0:
                 self.invincibility -= 1
@@ -488,7 +481,7 @@ class Heart(Entity):
 
     def apply(self, character):
         character.hearts += 1
-        character.hearts = max(character.hearts, character.max_hearts)
+        character.hearts = min(character.hearts, character.max_hearts)
 
 
 class Flag(Entity):
@@ -623,7 +616,6 @@ class Level():
         self.inactive_sprites.add(self.blocks, self.flag)
 
         self.inactive_sprites.draw(self.inactive_layer)
-
     def reset(self):
         self.enemies.add(self.starting_enemies)
         self.coins.add(self.starting_coins)
@@ -705,10 +697,16 @@ class Game():
         surface.blit(lives_text, (32, 64))
 
     def process_events(self):
+        try:
+            gamepad = xbox360_controller.Controller(0)
+            left_x, left_y = gamepad.get_left_stick()
+            right_x, right_y = gamepad.get_right_stick()
+        except:
+            gamepad = None
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.done = True
-            if gamepad is not None:
+            if gamepad:
                 if event.type == pygame.JOYBUTTONDOWN:
                     if self.stage == Game.SPLASH or self.stage == Game.START:
                         self.stage = Game.PLAYING
@@ -745,7 +743,7 @@ class Game():
                 elif self.stage == Game.VICTORY or self.stage == Game.GAME_OVER:
                     if event.key == pygame.K_r:
                         self.reset()
-        if gamepad is not None:
+        if gamepad:
             if self.stage == Game.PLAYING:
                 if left_x < 0:
                     self.hero.move_left()
