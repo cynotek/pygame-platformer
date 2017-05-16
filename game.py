@@ -10,7 +10,7 @@ pygame.init()
 
 # Window settings
 TITLE = "Alien"
-WIDTH = 960
+WIDTH = 1280
 HEIGHT = 640
 FPS = 60
 GRID_SIZE = 64
@@ -512,6 +512,8 @@ class Level():
 
         map_data = json.loads(data)
 
+        self.name = map_data['name']
+
         self.width = map_data['width'] * GRID_SIZE
         self.height = map_data['height'] * GRID_SIZE
 
@@ -693,13 +695,16 @@ class Game():
         surface.blit(line2, (x2, y2))
 
     def display_stats(self, surface):
+        
         hearts_text = FONT_SM.render("Hearts: {}/{}".format(self.hero.hearts, self.hero.max_hearts), 1, WHITE)
         lives_text = FONT_SM.render("Lives: " + str(self.hero.lives), 1, WHITE)
         score_text = FONT_SM.render("Score: " + str(self.hero.score), 1, WHITE)
+        lvl_score = FONT_SM.render(self.level.name, 1, WHITE)
 
         surface.blit(score_text, (WIDTH - score_text.get_width() - 32, 32))
         surface.blit(hearts_text, (32, 32))
         surface.blit(lives_text, (32, 64))
+        surface.blit(lvl_score, (32, 96))
 
     def process_events(self):
         for event in pygame.event.get():

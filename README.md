@@ -8,7 +8,7 @@
 ### Easy
 
 - ~~Name your game.~~
-- Change the dimensions of the game window.
+- ~~Change the dimensions of the game window.~~
 - ~~Find your own custom artwork for blocks.~~
 - ~~Find your own custom artwork for the hero.~~
 - ~~Find your own custom artwork for enemies.~~
@@ -22,7 +22,7 @@
 - Change point value for coins.
 - Make power-ups give points to the player.
 - ~~Display hearts/max rather than just hearts.~~
-- Update the display_stats function so that it shows the name of the current level.
+- ~~Update the display_stats function so that it shows the name of the current level.~~
 - Add a victory sound that plays when the game is won.
 
 ### Medium
