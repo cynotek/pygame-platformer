@@ -7,21 +7,21 @@
 
 ### Easy
 
-- Name your game.
+- ~~Name your game.~~
 - Change the dimensions of the game window.
-- Find your own custom artwork for blocks.
-- Find your own custom artwork for the hero.
-- Find your own custom artwork for enemies.
-- Find your own fonts.
+- ~~Find your own custom artwork for blocks.~~
+- ~~Find your own custom artwork for the hero.~~
+- ~~Find your own custom artwork for enemies.~~
+- ~~Find your own fonts.~~
 - Find your own sound effects.
 - Find your own theme music.
-- Customize the background layer for a level.
-- Customize the scenery layer for a level.
+- ~~Customize the background layer for a level.~~
+- ~~Customize the scenery layer for a level.~~
 - Create a custom splash screen that does more than just show the name of the game.
 - Improve the display_message function so that the text is in a box making it easier to read against the background.
 - Change point value for coins.
 - Make power-ups give points to the player.
-- Display hearts/max rather than just hearts.
+- ~~Display hearts/max rather than just hearts.~~
 - Update the display_stats function so that it shows the name of the current level.
 - Add a victory sound that plays when the game is won.
 
@@ -34,7 +34,7 @@
 - Let the 'M' key toggle music on and off. Show a little note icon (crossed out or uncrossed) to indicate the current state of music.
 - Create your own custom artwork. http://www.piskelapp.com/ is a good site for this.
 - Create invincibility (star) power-up. (The optional arguments on the play_sound function can help you match an invincibility sound length to the invincibility period.)
-- Add a falling image to your character animation.
+- ~~Add a falling image to your character animation.~~
 - Increase the max hearts a player can have when some milestone is achieved.
 - Add prizes other than coins and give them a point value.
 - Track coins separately from the score. (They can still be worth points.) Give an extra life when a number of coins is earned. Reset the coin count after a life is given.
@@ -51,8 +51,8 @@
 ### Hard
 
 - Create a game with at least 8 levels total. Levels should be significantly different in layout and each should be at least 60 block long.
-- Change the game so that it uses the XBox controller instead of the keyboard. (https://github.com/joncoop/pygame-xbox360controller)
-- Kill enemies when you land on them. You'll need to check which direction you hit the enemy from in process enemies. Award different point values for different enemy types.
+- ~~Change the game so that it uses the XBox controller instead of the keyboard. (https://github.com/joncoop/pygame-xbox360controller)~~
+- ~~Kill enemies when you land on them. You'll need to check which direction you hit the enemy from in process enemies. Award different point values for different enemy types.~~
 - Make the game save high scores to a text file in a data folder.
 - Create some other kind of custom enemy with unique behavior.
 - Display actual hearts to show health. Show empty hearts when health is not full.
