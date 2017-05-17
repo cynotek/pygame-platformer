@@ -24,7 +24,7 @@ RIGHT = pygame.K_d
 JUMP = pygame.K_SPACE
 
 # Levels
-levels = ["levels/world-1.json",
+levels = ["levels/earth.json",
           "levels/world-2.json",
           "levels/world-3.json"]
 
@@ -46,6 +46,7 @@ def load_image(file_path):
     img = pygame.transform.scale(img, (GRID_SIZE, GRID_SIZE))
 
     return img
+
 
 def load_char(file_path):
     img = pygame.image.load(file_path)
@@ -75,9 +76,9 @@ alien_jump = load_char("assets/Players/128x256/Blue/alienBlue_jump.png")
 alien_stand = load_char("assets/Players/128x256/Blue/alienBlue_stand.png")
 alien_hit = load_char("assets/Players/128x256/Blue/alienBlue_hit.png")
 alien_images = {"run": [alien_walk1, alien_walk2],
-               "jump": alien_jump,
-               "stand": alien_stand,
-               "hit": alien_hit}
+                "jump": alien_jump,
+                "stand": alien_stand,
+                "hit": alien_hit}
 
 block_images = {"GL": load_image("assets/Ground/Grass/grassLeft.png"),
                 "GM": load_image("assets/Ground/Grass/grassMid.png"),
@@ -85,7 +86,6 @@ block_images = {"GL": load_image("assets/Ground/Grass/grassLeft.png"),
                 "GR": load_image("assets/Ground/Grass/grassRight.png"),
                 "GCL": load_image("assets/Ground/Grass/grassLeft.png"),
                 "G": load_image("assets/Ground/Grass/grass.png"),
-                "GC": load_image("assets/Ground/Grass/grassCenter.png"),
                 "GC": load_image("assets/Ground/Grass/grassCenter.png")}
 
 coin_img = load_image("assets/Items/coinGold.png")
@@ -148,7 +148,7 @@ class Character(Entity):
         self.image_jump_left = pygame.transform.flip(self.image_jump_right, 1, 0)
         self.image_hit_right = images['hit']
         self.image_hit_left = pygame.transform.flip(self.image_hit_right, 1, 0)
-        
+
         self.running_images = self.images_run_right
         self.image_index = 0
         self.steps = 0
@@ -618,6 +618,7 @@ class Level():
         self.inactive_sprites.add(self.blocks, self.flag)
 
         self.inactive_sprites.draw(self.inactive_layer)
+
     def reset(self):
         self.enemies.add(self.starting_enemies)
         self.coins.add(self.starting_coins)
@@ -695,7 +696,7 @@ class Game():
         surface.blit(line2, (x2, y2))
 
     def display_stats(self, surface):
-        
+
         hearts_text = FONT_SM.render("Hearts: {}/{}".format(self.hero.hearts, self.hero.max_hearts), 1, WHITE)
         lives_text = FONT_SM.render("Lives: " + str(self.hero.lives), 1, WHITE)
         score_text = FONT_SM.render("Score: " + str(self.hero.score), 1, WHITE)
