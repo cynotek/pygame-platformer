@@ -47,9 +47,9 @@ def load_image(file_path, width=GRID_SIZE, height=GRID_SIZE):
     return img
 
 
-def load_char(file_path):
+def load_char(file_path, width=GRID_SIZE, height=GRID_SIZE):
     img = pygame.image.load(file_path)
-    img = pygame.transform.scale(img, (GRID_SIZE, GRID_SIZE * 2))
+    img = pygame.transform.scale(img, (width, height * 2))
 
     return img
 
