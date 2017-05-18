@@ -37,9 +37,8 @@ FONT_SM = pygame.font.Font("fonts/kenpixel.ttf", 32)
 FONT_MD = pygame.font.Font("fonts/kenpixel.ttf", 64)
 FONT_LG = pygame.font.Font("fonts/kenpixel.ttf", 72)
 
+
 # Helper functions
-
-
 def load_image(file_path, width=GRID_SIZE, height=GRID_SIZE):
     img = pygame.image.load(file_path)
     img = pygame.transform.scale(img, (width, height))
@@ -68,9 +67,8 @@ def play_music():
     else:
         pygame.mixer.music.stop()
 
+
 # Images
-
-
 alien_walk1 = load_char("assets/Players/128x256/Blue/alienBlue_walk1.png")
 alien_walk2 = load_char("assets/Players/128x256/Blue/alienBlue_walk2.png")
 alien_jump = load_char("assets/Players/128x256/Blue/alienBlue_jump.png")
@@ -677,7 +675,7 @@ class Game():
         surface.blit(lives_text, (32, 64))
         surface.blit(lvl_score, (32, 96))
 
-        multi = [i for i in range(1, self.hero.max_hearts * 2, 2)]
+        multi = [i for i in range(1, self.hero.max_hearts * 2, 2)]  # Multiplies by 2 so I can get more odd numbers
 
         for i in multi[:self.hero.max_hearts]:
             surface.blit(heart_empty_img, (spacing * i, 0))
