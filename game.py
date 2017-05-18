@@ -660,12 +660,12 @@ class Game():
 
     def display_stats(self, surface):
         global sound_on
-        spacing = 32
 
         lives_text = FONT_SM.render("Lives: " + str(self.hero.lives), 1, WHITE)
         score_text = FONT_SM.render("Score: " + str(self.hero.score), 1, WHITE)
         lvl_score = FONT_SM.render(self.level.name, 1, WHITE)
 
+        # Music status icon
         if sound_on:
             surface.blit(soundon_img, (32, 128))
         else:
@@ -675,9 +675,12 @@ class Game():
         surface.blit(lives_text, (32, 64))
         surface.blit(lvl_score, (32, 96))
 
-        multi = [i for i in range(1, self.hero.max_hearts * 2, 2)]  # Multiplies by 2 so I can get more odd numbers
+        # Manages heart counter
+        spacing = 32
+        curr_max = self.hero.max_hearts * 2
+        multi = [i for i in range(1, curr_max, 2)]
 
-        for i in multi[:self.hero.max_hearts]:
+        for i in multi:
             surface.blit(heart_empty_img, (spacing * i, 0))
 
         for i in multi[:self.hero.hearts]:
