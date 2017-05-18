@@ -14,7 +14,6 @@ WIDTH = 960
 HEIGHT = 640
 FPS = 60
 GRID_SIZE = 64
-spacing = 32
 
 # Options
 sound_on = True
@@ -663,7 +662,7 @@ class Game():
 
     def display_stats(self, surface):
         global sound_on
-        global spacing
+        spacing = 32
 
         lives_text = FONT_SM.render("Lives: " + str(self.hero.lives), 1, WHITE)
         score_text = FONT_SM.render("Score: " + str(self.hero.score), 1, WHITE)
@@ -678,23 +677,13 @@ class Game():
         surface.blit(lives_text, (32, 64))
         surface.blit(lvl_score, (32, 96))
 
-        # I'm sure there is a better way...
-        if self.hero.hearts == 1:
-            surface.blit(heart_img, (spacing, 0))
-            surface.blit(heart_empty_img, (spacing * 3, 0))
-            surface.blit(heart_empty_img, (spacing * 5, 0))
-        elif self.hero.hearts == 2:
-            surface.blit(heart_img, (spacing, 0))
-            surface.blit(heart_img, (spacing * 3, 0))
-            surface.blit(heart_empty_img, (spacing * 5, 0))
-        elif self.hero.hearts == 3:
-            surface.blit(heart_img, (spacing, 0))
-            surface.blit(heart_img, (spacing * 3, 0))
-            surface.blit(heart_img, (spacing * 5, 0))
-        else:
-            surface.blit(heart_empty_img, (spacing, 0))
-            surface.blit(heart_empty_img, (spacing * 3, 0))
-            surface.blit(heart_empty_img, (spacing * 5, 0))
+        multi = [i for i in range(1, self.hero.max_hearts * 2, 2)]
+
+        for i in multi[:self.hero.max_hearts]:
+            surface.blit(heart_empty_img, (spacing * i, 0))
+
+        for i in multi[:self.hero.hearts]:
+            surface.blit(heart_img, (spacing * i, 0))
 
     def process_events(self):
         global sound_on
