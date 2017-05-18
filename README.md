@@ -1,8 +1,5 @@
 # Pygame Platformer
 
-## About
-<img src="/nog2k17.png" width="360">
-
 ## Ideas for student projects
 
 ### Easy
@@ -14,12 +11,12 @@
 - ~~Find your own custom artwork for enemies.~~
 - ~~Find your own fonts.~~
 - Find your own sound effects.
-- Find your own theme music.
+- ~~Find your own theme music.~~
 - ~~Customize the background layer for a level.~~
 - ~~Customize the scenery layer for a level.~~
 - Create a custom splash screen that does more than just show the name of the game.
 - Improve the display_message function so that the text is in a box making it easier to read against the background.
-- Change point value for coins.
+- ~~Change point value for coins.~~
 - Make power-ups give points to the player.
 - ~~Display hearts/max rather than just hearts.~~
 - ~~Update the display_stats function so that it shows the name of the current level.~~
@@ -31,7 +28,7 @@
 - Incorporate different kinds of levels (normal, space level, underwater, etc.) into the game. Alter the game physics for different level types.
 - Create a game with at least 4 levels total. Levels should be significantly different in layout and each should be at least 60 block long.
 - Let the 'S' key toggle sound on and off. Show a little speaker/mute icon to indicate the current state of sound.
-- Let the 'M' key toggle music on and off. Show a little note icon (crossed out or uncrossed) to indicate the current state of music.
+- ~~Let the 'M' key toggle music on and off. Show a little note icon (crossed out or uncrossed) to indicate the current state of music.~~
 - Create your own custom artwork. http://www.piskelapp.com/ is a good site for this.
 - Create invincibility (star) power-up. (The optional arguments on the play_sound function can help you match an invincibility sound length to the invincibility period.)
 - ~~Add a falling image to your character animation.~~
@@ -56,7 +53,7 @@
 - ~~Kill enemies when you land on them. You'll need to check which direction you hit the enemy from in process enemies. Award different point values for different enemy types.~~
 - Make the game save high scores to a text file in a data folder.
 - Create some other kind of custom enemy with unique behavior.
-- Display actual hearts to show health. Show empty hearts when health is not full.
+- ~~Display actual hearts to show health. Show empty hearts when health is not full.~~
 - Show time on the stats layer. Give a time bonus for completing a level. Have the hero die if the level is not completed in a set amount of time.
 - Animate a background element such as clouds or flickering torches. (This is probably best accomplished by creating another layer that scrolls along with the background or scenery layer rather than trying to blit directly on one of those layers.)
 - Utilize vertical scrolling in a level. You'll need to modify the calculate_offset function to get vertical scrolling to work.

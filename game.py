@@ -10,10 +10,11 @@ pygame.init()
 
 # Window settings
 TITLE = "Alien"
-WIDTH = 1280
+WIDTH = 960
 HEIGHT = 640
 FPS = 60
 GRID_SIZE = 64
+spacing = 32
 
 # Options
 sound_on = True
@@ -21,12 +22,11 @@ sound_on = True
 # KB+M
 LEFT = pygame.K_a
 RIGHT = pygame.K_d
+MUTE = pygame.K_m
 JUMP = pygame.K_SPACE
 
 # Levels
-levels = ["levels/earth.json",
-          "levels/world-2.json",
-          "levels/world-3.json"]
+levels = ["levels/earth.json"]
 
 # Colors
 TRANSPARENT = (0, 0, 0, 0)
@@ -39,6 +39,7 @@ FONT_MD = pygame.font.Font("fonts/kenpixel.ttf", 64)
 FONT_LG = pygame.font.Font("fonts/kenpixel.ttf", 72)
 
 # Helper functions
+
 
 def load_image(file_path, width=GRID_SIZE, height=GRID_SIZE):
     img = pygame.image.load(file_path)
@@ -65,6 +66,8 @@ def play_sound(sound, loops=0, maxtime=0, fade_ms=0):
 def play_music():
     if sound_on:
         pygame.mixer.music.play(-1)
+    else:
+        pygame.mixer.music.stop()
 
 # Images
 
@@ -83,31 +86,34 @@ block_images = {"GL": load_image("assets/Ground/Grass/grassLeft.png"),
                 "GM": load_image("assets/Ground/Grass/grassMid.png"),
                 "GCR": load_image("assets/Ground/Grass/grassCliff_right.png"),
                 "GR": load_image("assets/Ground/Grass/grassRight.png"),
-                "GCL": load_image("assets/Ground/Grass/grassLeft.png"),
+                "GCL": load_image("assets/Ground/Grass/grassCliff_left.png"),
                 "G": load_image("assets/Ground/Grass/grass.png"),
-                "GC": load_image("assets/Ground/Grass/grassCenter.png")}
+                "GC": load_image("assets/Ground/Grass/grassCenter.png"),
+                "GHM": load_image("assets/Ground/Grass/grassHalf_mid.png"),
+                "GHR": load_image("assets/Ground/Grass/grassHalf_right.png"),
+                "GHL": load_image("assets/Ground/Grass/grassHalf_left.png")}
 
 coin_img = load_image("assets/Items/coinGold.png")
 heart_img = load_image("assets/HUD/hudHeart_full.png")
-oneup_img = load_image("assets/Tiles/mushroomRed.png")
+heart_empty_img = load_image("assets/HUD/hudHeart_empty.png")
+oneup_img = load_image("assets/Items/gemBlue.png")
 flag_img = load_image("assets/Items/flagBlue1.png")
-flagpole_img = load_image("assets/Items/flagBlue1.png")
+flagpole_img = load_image("assets/Items/flagBlue1.png")  # My asset pack didn't come with a flag pole :(
+soundon_img = load_image("assets/HUD/hudJewel_blue.png")
+soundoff_img = load_image("assets/HUD/hudJewel_blue_empty.png")
 
-monster_img1 = load_image("assets/Enemies/bee.png")
-monster_img2 = load_image("assets/Enemies/bee_move.png")
-monster_images = [monster_img1, monster_img2]
-
-bear_img = load_image("assets/enemies/mouse.png")
-bear_images = [bear_img]
+Bee_img1 = load_image("assets/Enemies/bee.png")
+Bee_img2 = load_image("assets/Enemies/bee_move.png")
+Bee_images = [Bee_img1, Bee_img2]
 
 # Sounds
-#JUMP_SOUND = pygame.mixer.Sound("assets/sounds/jump.wav")
-#COIN_SOUND = pygame.mixer.Sound("assets/sounds/pickup_coin.wav")
-#POWERUP_SOUND = pygame.mixer.Sound("assets/sounds/powerup.wav")
-#HURT_SOUND = pygame.mixer.Sound("assets/sounds/hurt.ogg")
-#DIE_SOUND = pygame.mixer.Sound("assets/sounds/death.wav")
-#LEVELUP_SOUND = pygame.mixer.Sound("assets/sounds/level_up.wav")
-#GAMEOVER_SOUND = pygame.mixer.Sound("assets/sounds/game_over.wav")
+# JUMP_SOUND = pygame.mixer.Sound("assets/sounds/jump.wav")
+# COIN_SOUND = pygame.mixer.Sound("assets/sounds/pickup_coin.wav")
+# POWERUP_SOUND = pygame.mixer.Sound("assets/sounds/powerup.wav")
+# HURT_SOUND = pygame.mixer.Sound("assets/sounds/hurt.ogg")
+# DIE_SOUND = pygame.mixer.Sound("assets/sounds/death.wav")
+# LEVELUP_SOUND = pygame.mixer.Sound("assets/sounds/level_up.wav")
+# GAMEOVER_SOUND = pygame.mixer.Sound("assets/sounds/game_over.wav")
 
 
 class Entity(pygame.sprite.Sprite):
@@ -184,7 +190,7 @@ class Character(Entity):
 
         if len(hit_list) > 0:
             self.vy = -self.jump_power
-            #play_sound(JUMP_SOUND)
+            # play_sound(JUMP_SOUND)
 
         self.rect.y -= 1
 
@@ -223,7 +229,7 @@ class Character(Entity):
         hit_list = pygame.sprite.spritecollide(self, coins, True)
 
         for coin in hit_list:
-            #play_sound(COIN_SOUND)
+            # play_sound(COIN_SOUND)
             self.score += coin.value
 
     def process_enemies(self, enemies):
@@ -232,12 +238,13 @@ class Character(Entity):
         if len(hit_list) > 0 and self.invincibility == 0:
             if self.vy > 0:
                 [e.kill() for e in hit_list]
+                self.score += 1  # temp value
                 self.vy = -self.jump_power
                 return
-            #play_sound(HURT_SOUND)
-            if self.vx > 0: # right facing hit
+            # play_sound(HURT_SOUND)
+            if self.vx > 0:  # right facing hit
                 self.rect.x += -self.jump_power
-            elif self.vx < 0: # left facing hit
+            elif self.vx < 0:  # left facing hit
                 self.rect.x += self.jump_power
             self.hearts -= 1
             self.invincibility = int(0.75 * FPS)
@@ -246,7 +253,7 @@ class Character(Entity):
         hit_list = pygame.sprite.spritecollide(self, powerups, True)
 
         for p in hit_list:
-            #play_sound(POWERUP_SOUND)
+            # play_sound(POWERUP_SOUND)
             p.apply(self)
 
     def check_flag(self, level):
@@ -254,7 +261,7 @@ class Character(Entity):
 
         if len(hit_list) > 0:
             level.completed = True
-            #play_sound(LEVELUP_SOUND)
+            # play_sound(LEVELUP_SOUND)
 
     def set_image(self):
         if self.on_ground:
@@ -285,10 +292,10 @@ class Character(Entity):
 
         if self.lives > 0:
             pass
-            #play_sound(DIE_SOUND)
+            # play_sound(DIE_SOUND)
         else:
             pass
-            #play_sound(GAMEOVER_SOUND)
+            # play_sound(GAMEOVER_SOUND)
 
     def respawn(self, level):
         self.rect.x = level.start_x
@@ -319,7 +326,7 @@ class Coin(Entity):
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
-        self.value = 1
+        self.value = 5
 
 
 class Enemy(Entity):
@@ -380,43 +387,7 @@ class Enemy(Entity):
         self.steps = 0
 
 
-class Bear(Enemy):
-    def __init__(self, x, y, images):
-        super().__init__(x, y, images)
-
-        self.start_x = x
-        self.start_y = y
-        self.start_vx = -2
-        self.start_vy = 0
-
-        self.vx = self.start_vx
-        self.vy = self.start_vy
-
-    def move_and_process_blocks(self, blocks):
-        self.rect.x += self.vx
-        hit_list = pygame.sprite.spritecollide(self, blocks, False)
-
-        for block in hit_list:
-            if self.vx > 0:
-                self.rect.right = block.rect.left
-                self.reverse()
-            elif self.vx < 0:
-                self.rect.left = block.rect.right
-                self.reverse()
-
-        self.rect.y += self.vy
-        hit_list = pygame.sprite.spritecollide(self, blocks, False)
-
-        for block in hit_list:
-            if self.vy > 0:
-                self.rect.bottom = block.rect.top
-                self.vy = 0
-            elif self.vy < 0:
-                self.rect.top = block.rect.bottom
-                self.vy = 0
-
-
-class Monster(Enemy):
+class Bee(Enemy):
     def __init__(self, x, y, images):
         super().__init__(x, y, images)
 
@@ -524,13 +495,9 @@ class Level():
             img = block_images[item[2]]
             self.starting_blocks.append(Block(x, y, img))
 
-        for item in map_data['bears']:
+        for item in map_data['bees']:
             x, y = item[0] * GRID_SIZE, item[1] * GRID_SIZE
-            self.starting_enemies.append(Bear(x, y, bear_images))
-
-        for item in map_data['monsters']:
-            x, y = item[0] * GRID_SIZE, item[1] * GRID_SIZE
-            self.starting_enemies.append(Monster(x, y, monster_images))
+            self.starting_enemies.append(Bee(x, y, Bee_images))
 
         for item in map_data['coins']:
             x, y = item[0] * GRID_SIZE, item[1] * GRID_SIZE
@@ -600,7 +567,7 @@ class Level():
             else:
                 self.scenery_layer.blit(scenery_img, [0, start_y])
 
-        #pygame.mixer.music.load(map_data['music'])
+        pygame.mixer.music.load(map_data['music'])
 
         self.gravity = map_data['gravity']
         self.terminal_velocity = map_data['terminal-velocity']
@@ -695,18 +662,42 @@ class Game():
         surface.blit(line2, (x2, y2))
 
     def display_stats(self, surface):
+        global sound_on
+        global spacing
 
-        hearts_text = FONT_SM.render("Hearts: {}/{}".format(self.hero.hearts, self.hero.max_hearts), 1, WHITE)
         lives_text = FONT_SM.render("Lives: " + str(self.hero.lives), 1, WHITE)
         score_text = FONT_SM.render("Score: " + str(self.hero.score), 1, WHITE)
         lvl_score = FONT_SM.render(self.level.name, 1, WHITE)
 
+        if sound_on:
+            surface.blit(soundon_img, (32, 128))
+        else:
+            surface.blit(soundoff_img, (32, 128))
+
         surface.blit(score_text, (WIDTH - score_text.get_width() - 32, 32))
-        surface.blit(hearts_text, (32, 32))
         surface.blit(lives_text, (32, 64))
         surface.blit(lvl_score, (32, 96))
 
+        # I'm sure there is a better way...
+        if self.hero.hearts == 1:
+            surface.blit(heart_img, (spacing, 0))
+            surface.blit(heart_empty_img, (spacing * 3, 0))
+            surface.blit(heart_empty_img, (spacing * 5, 0))
+        elif self.hero.hearts == 2:
+            surface.blit(heart_img, (spacing, 0))
+            surface.blit(heart_img, (spacing * 3, 0))
+            surface.blit(heart_empty_img, (spacing * 5, 0))
+        elif self.hero.hearts == 3:
+            surface.blit(heart_img, (spacing, 0))
+            surface.blit(heart_img, (spacing * 3, 0))
+            surface.blit(heart_img, (spacing * 5, 0))
+        else:
+            surface.blit(heart_empty_img, (spacing, 0))
+            surface.blit(heart_empty_img, (spacing * 3, 0))
+            surface.blit(heart_empty_img, (spacing * 5, 0))
+
     def process_events(self):
+        global sound_on
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.done = True
@@ -714,7 +705,7 @@ class Game():
                 if event.type == pygame.JOYBUTTONDOWN:
                     if self.stage == Game.SPLASH or self.stage == Game.START:
                         self.stage = Game.PLAYING
-                        #play_music()
+                        play_music()
 
                     elif self.stage == Game.PLAYING:
                         if event.button == xbox360_controller.A:
@@ -732,11 +723,18 @@ class Game():
             elif event.type == pygame.KEYDOWN and self.gamepad is None:
                 if self.stage == Game.SPLASH or self.stage == Game.START:
                     self.stage = Game.PLAYING
-                    #play_music()
+                    play_music()
 
                 elif self.stage == Game.PLAYING:
                     if event.key == JUMP:
                         self.hero.jump(self.level.blocks)
+                    if event.key == MUTE:
+                        if sound_on:
+                            sound_on = False
+                            play_music()
+                        else:
+                            sound_on = True
+                            play_music()
 
                 elif self.stage == Game.PAUSED:
                     pass
@@ -778,11 +776,11 @@ class Game():
                 self.stage = Game.LEVEL_COMPLETED
             else:
                 self.stage = Game.VICTORY
-            #pygame.mixer.music.stop()
+            pygame.mixer.music.stop()
 
         elif self.hero.lives == 0:
             self.stage = Game.GAME_OVER
-            #pygame.mixer.music.stop()
+            pygame.mixer.music.stop()
 
         elif self.hero.hearts == 0:
             self.level.reset()

@@ -3,19 +3,20 @@
 	"width": 32,
 	"height": 10,
 	"background-color": [130, 182, 255],
-	"background-img": "assets/Backgrounds/blue_grass.png",
+	"background-img": "assets/Backgrounds/colored_grass.png",
 	"background-position": "top",
 	"background-repeat-x": 1,
 	"background-fill-y": 1,
-	"scenery-img": "assets/Backgrounds/colored_grass.png",
+	"scenery-img": "",
 	"scenery-position": "bottom",
 	"scenery-repeat-x": 1,
 	"scenery-fill-y": 1,
-	"music": "assets/sounds/theme_of_the wanderer.ogg",
+	"music": "assets/Sounds/Music/Sanctuary.ogg",
 	"start": [4, 1],
 	"gravity": 1.3,
 	"terminal-velocity": 32,
 	"blocks": [
+		[-1, 9, "GM"],
 		[0, 9, "GM"],
 		[1, 9, "GM"],
 		[2, 9, "GM"],
@@ -49,21 +50,21 @@
 		[30, 9, "GM"],
 		[31, 9, "GM"],
 
-		[3, 7, "GM"],
+		[3, 7, "GCL"],
 		[4, 7, "GM"],
-		[5, 7, "GM"],
+		[5, 7, "GCR"],
 
-		[7, 5, "GM"],
-		[8, 5, "GM"],
+		[7, 5, "GCL"],
+		[8, 5, "GCR"],
 
-		[12, 7, "GM"],
-		[14, 5, "GM"],
+		[12, 7, "G"],
+		[14, 5, "G"],
 
-		[16, 3, "GM"],
-		[17, 3, "GM"],
-		[18, 3, "GM"],
-		[19, 3, "GM"],
-		[20, 3, "GM"],
+		[16, 3, "GHL"],
+		[17, 3, "GHM"],
+		[18, 3, "GHM"],
+		[19, 3, "GHM"],
+		[20, 3, "GHR"],
 
 		[24, 8, "GM"],
 		[25, 7, "GM"],
@@ -72,12 +73,10 @@
 		[26, 7, "GM"],
 		[26, 8, "GM"]
 	],
-	"bears": [
+	"bees": [
+		[18, 2],
 		[8, 4],
 		[13, 8]
-	],
-	"monsters": [
-		[18, 2]
 	],
 	"coins": [
 		[4, 5],
