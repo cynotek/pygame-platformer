@@ -48,6 +48,7 @@
 - Use a modifier key that makes you run faster while the key is held.
 - Create cover art for your game. Save it as a PNG file. Print it in color and I'll post it in the room.
 - Add a third paralax layer that scrolls at a different speed than the other layers. Be sure that closer layers always scroll faster than far away layers.
+- Create enemies that take more than one hit to kill.
 
 ### Hard
 
@@ -68,6 +69,7 @@
 - Create a Chest object with a boolean attribute locked set to True when it is initialized. Then create a Key object. If the player intersects a locked chest with a key, then locked should be set to False and the image should be updated. Spawn a prize that the player can acquire in the grid location directly above the chest when it is unlocked. Be sure to take away the players key when the character respawns after dying or at the start of a new level.
 - Give your player a gun. Let your player kill enemies by shooting them. You'll need to create Bullet objects which spawn at the hero's gun and travel in the direction the hero is facing. Bullets shouldn't travel indefinitely. Limit the number of ticks a bullet will exist before it calls the kill() function on itself. Enemies can be given a process_bullets function. (You might need to make the shooter/hero a bullet parameter so that when the bullet hits an enemy, points can be awarded.)
 - Make a sign you can read or a character that 'speaks'. Display a message when the hero intersects the sign or speaking character while holding the up arrow. Don't use the default display_message function. Put a function in the Sign/SpeakingCharacter class that makes a popup that looks like text on a sign or perhaps a speech bubble.
+- Make a boss at the end of the game that needs to be defeated. The boss should take multiple hits to kill, have a unique behavior compared to other enemies, and do something to try to kill the hero. (Shoot stuff, breathe fire, ...?)
 
 ## Grading
 
