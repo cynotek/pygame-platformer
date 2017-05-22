@@ -46,10 +46,7 @@ def load_image(file_path):
 
 def play_sound(sound, loops=0, maxtime=0, fade_ms=0):
     if sound_on:
-        if maxtime == 0:
-            sound.play(loops, maxtime, fade_ms)
-        else:
-            sound.play(loops, maxtime, fade_ms)
+        sound.play(loops, maxtime, fade_ms)
 
 def play_music():
     if sound_on:
@@ -320,8 +317,28 @@ class Enemy(Entity):
             self.rect.right = level.width
             self.reverse()
 
-    def move_and_process_blocks(self):
-        pass
+    def move_and_process_blocks(self, blocks):
+        self.rect.x += self.vx
+        hit_list = pygame.sprite.spritecollide(self, blocks, False)
+
+        for block in hit_list:
+            if self.vx > 0:
+                self.rect.right = block.rect.left
+                self.reverse()
+            elif self.vx < 0:
+                self.rect.left = block.rect.right
+                self.reverse()
+
+        self.rect.y += self.vy
+        hit_list = pygame.sprite.spritecollide(self, blocks, False)
+
+        for block in hit_list:
+            if self.vy > 0:
+                self.rect.bottom = block.rect.top
+                self.vy = 0
+            elif self.vy < 0:
+                self.rect.top = block.rect.bottom
+                self.vy = 0
 
     def set_images(self):
         if self.steps == 0:
@@ -360,29 +377,6 @@ class Bear(Enemy):
 
         self.vx = self.start_vx
         self.vy = self.start_vy
-
-    def move_and_process_blocks(self, blocks):
-        self.rect.x += self.vx
-        hit_list = pygame.sprite.spritecollide(self, blocks, False)
-
-        for block in hit_list:
-            if self.vx > 0:
-                self.rect.right = block.rect.left
-                self.reverse()
-            elif self.vx < 0:
-                self.rect.left = block.rect.right
-                self.reverse()
-
-        self.rect.y += self.vy
-        hit_list = pygame.sprite.spritecollide(self, blocks, False)
-
-        for block in hit_list:
-            if self.vy > 0:
-                self.rect.bottom = block.rect.top
-                self.vy = 0
-            elif self.vy < 0:
-                self.rect.top = block.rect.bottom
-                self.vy = 0
 
 class Monster(Enemy):
     def __init__(self, x, y, images):
@@ -525,7 +519,7 @@ class Level():
             self.background_layer.fill(map_data['background-color'])
 
         if map_data['background-img'] != "":
-            background_img = pygame.image.load(map_data['background-img'])
+            background_img = pygame.image.load(map_data['background-img']).convert()
 
             if map_data['background-fill-y']:
                 h = background_img.get_height()
@@ -544,7 +538,7 @@ class Level():
                 self.background_layer.blit(background_img, [0, start_y])
 
         if map_data['scenery-img'] != "":
-            scenery_img = pygame.image.load(map_data['scenery-img'])
+            scenery_img = pygame.image.load(map_data['scenery-img']).convert()
 
             if map_data['scenery-fill-y']:
                 h = scenery_img.get_height()
@@ -578,7 +572,20 @@ class Level():
         self.active_sprites.add(self.coins, self.enemies, self.powerups)
         self.inactive_sprites.add(self.blocks, self.flag)
 
+        # with this speed up blitting on slower computers?
+        for s in self.active_sprites:
+            s.image.convert()
+
+        for s in self.inactive_sprites:
+            s.image.convert()
+
         self.inactive_sprites.draw(self.inactive_layer)
+
+        # is converting layers helpful at all?
+        self.background_layer.convert()
+        self.scenery_layer.convert()
+        self.inactive_layer.convert()
+        self.active_layer.convert()
 
     def reset(self):
         self.enemies.add(self.starting_enemies)

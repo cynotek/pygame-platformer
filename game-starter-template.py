@@ -2,182 +2,124 @@
 
 import pygame
 
-pygame.init()
+class Physics():
+    def __init(self, gravity, terminal_velocity):
+        self.gravity = gravity
+        self.terminal_velocity = terminal_velocity
 
-# Window settings
-WIDTH = 960
-HEIGHT = 640
-window = pygame.display.set_mode([WIDTH, HEIGHT])
-pygame.display.set_caption("My Platform Game")
-FPS = 60
-clock = pygame.time.Clock()
+    def apply_gravity(entity):
+        entity.vy += self.gravity
+        entity.vy = min(self.gravity, self.terminal_velocity)
 
-# Colors
-SKY_BLUE = (135, 206, 235)
-
-# Fonts
-font_small = pygame.font.Font(None, 32)
-font_big = pygame.font.Font(None, 64)
-
-# Images
-hero_img = pygame.image.load("assets/character/adventurer_walk1.png")
-hero_img = pygame.transform.scale(hero_img, (64, 64))
-
-block_img = pygame.image.load("assets/tiles/top_middle.png")
-block_img = pygame.transform.scale(block_img, (64, 64))
-
-# Controls
-LEFT = pygame.K_LEFT
-RIGHT = pygame.K_RIGHT
-JUMP = pygame.K_SPACE
-
-
-class Entity(pygame.sprite.Sprite):
-
-    def __init__(self, x, y, image):
-        super().__init__()
-
-        self.image = pygame.Surface([64, 64])
-        self.image.blit(image, [0, 0])
-
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-
-
-class Block(Entity):
-
-    def __init__(self, x, y, image):
-        super().__init__(x, y, image)
-
-
-class Character(Entity):
-
-    def __init__(self, x, y, image):
-        super().__init__(x, y, image)
-
-        self.speed = 5
-        self.jump_power = 20
-
-        self.vx = 0
-        self.vy = 0
-
-    def apply_gravity(self):
+class Scene():
+    def __init__():
         pass
 
-    def process_blocks(self, blocks):
+    def process_events(self):
+        pass
 
-        self.rect.x += self.vx
-        hit_list = pygame.sprite.spritecollide(self, blocks, False)
-
-        for block in hit_list:
-            if self.vx > 0:
-                self.rect.right = block.rect.left
-                self.vx = 0
-            elif self.vx < 0:
-                self.rect.left = block.rect.right
-                self.vx = 0
-
-        self.rect.y += self.vy
-        hit_list = pygame.sprite.spritecollide(self, blocks, False)
-
-        for block in hit_list:
-            if self.vy > 0:
-                self.rect.bottom = block.rect.top
-                self.vy = 0
-            elif self.vy < 0:
-                self.rect.top = block.rect.bottom
-                self.vy = 0
-
-    def move_left(self):
-        self.vx = -self.speed
-
-    def move_right(self):
-        self.vx = self.speed
-
-    def stop(self):
-        self.vx = 0
-
-    def jump(self, blocks):
+    def render(self):
         pass
 
     def update(self):
-        self.rect.x += self.vx
-        self.rect.y += self.vy
+        pass
 
-class Coin():
-    pass
+class Splash(Scene):
+    def __init__():
+        pass
 
+class Playing(Scene):
+    def __init__():
+        pass
 
-class Enemy():
-    pass
+class GameOver(Scene):
+    def __init__():
+        pass
 
+class SceneManager():
+    def __init__(self, current_scene):
+        self.current_scene = current_scene
 
-class Game():
+    def advance(self, next_scene):
+        self.current_scene = next_scene
 
-    def __init__(self, hero, blocks):
-        self.hero = hero
-        self.blocks = blocks
+class Entity(pygame.sprite.Sprite):
+    def __init__(self):
+        pass
 
-        self.all_sprites = pygame.sprite.Group()
-        self.all_sprites.add(hero, blocks)
+    def is_near(self, hero):
+        pass
 
-    def play(self):
-        # game loop
-        done = False
+    def update(self):
+        pass
 
-        while not done:
-            # event handling
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    done = True
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == JUMP:
-                        self.hero.jump(self.blocks)
+class Hero(Entity):
+    def __init__(self):
+        pass
 
-            pressed = pygame.key.get_pressed()
+    def check_level_boundaries(self, level):
+        pass
 
-            # game logic
-            if pressed[LEFT]:
-                self.hero.move_left()
-            elif pressed[RIGHT]:
-                self.hero.move_right()
-            else:
-                self.hero.stop()
+    def move_and_process_blocks(self, blocks):
+        pass
 
-            self.hero.update()
+    def process_items(self):
+        pass
 
-            #Drawing
-            window.fill(SKY_BLUE)
-            self.all_sprites.draw(window)
+    def process_enemies(self):
+        pass
 
-            # Update window
-            pygame.display.update()
-            clock.tick(FPS)
+    def update(self, level):
+        level.physics_engine.apply_gravity(self)
+        check_level_boundaries(level)
+        move_and_process_blocks(level.blocks)
+        process_items(level.items)
+        process_enemies(level.enemies)
 
-        # Close window on quit
-        pygame.quit ()
+class Enemy(Entity):
 
-def main():
-    # Make sprites
-    hero = Character(500, 512, hero_img)
+    def __init__(self, animation_frames):
+        pass
 
-    blocks = pygame.sprite.Group()
+    def reverse(self):
+        pass
 
-    for i in range(0, WIDTH, 64):
-        b = Block(i, 576, block_img)
-        blocks.add(b)
+    def update(self, level, hero):
+        pass
 
-    blocks.add(Block(192, 448, block_img))
-    blocks.add(Block(256, 448, block_img))
-    blocks.add(Block(320, 448, block_img))
+class Block(Entity):
+    def __init__(self):
+        pass
 
-    blocks.add(Block(448, 320, block_img))
-    blocks.add(Block(512, 320, block_img))
+class Item(Entity):
+    def __init__(self, value=0):
+        value = self.value
 
-    # Start game
-    game = Game(hero, blocks)
-    game.play()
+    def apply(self, character):
+        pass
+
+    def update(self):
+        pass
+
+class Level():
+    def __init__(self, level_file):
+        self.level_file = level_file
+
+    def load(self):
+        self.physics_engine = Physics(5, 32)
+
+    def reset(self):
+        pass
+
+class MyGame():
+    def __init__(self):
+        pass
+
+    def run(self):
+        pass
 
 if __name__ == "__main__":
-    main()
+    game = Game()
+    game.run()
+    pygame.quit()
+    sys.exit()
