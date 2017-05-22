@@ -38,9 +38,9 @@ FONT_MD = pygame.font.Font("assets/fonts/minya_nouvelle_bd.ttf", 64)
 FONT_LG = pygame.font.Font("assets/fonts/thats_super.ttf", 72)
 
 # Helper functions
-def load_image(file_path):
+def load_image(file_path, width=GRID_SIZE, height=GRID_SIZE):
     img = pygame.image.load(file_path)
-    img = pygame.transform.scale(img, (GRID_SIZE, GRID_SIZE))
+    img = pygame.transform.scale(img, (width, height))
 
     return img
 
