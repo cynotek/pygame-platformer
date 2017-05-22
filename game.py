@@ -519,7 +519,7 @@ class Level():
             self.background_layer.fill(map_data['background-color'])
 
         if map_data['background-img'] != "":
-            background_img = pygame.image.load(map_data['background-img']).convert()
+            background_img = pygame.image.load(map_data['background-img']).convert_alpha()
 
             if map_data['background-fill-y']:
                 h = background_img.get_height()
@@ -538,7 +538,7 @@ class Level():
                 self.background_layer.blit(background_img, [0, start_y])
 
         if map_data['scenery-img'] != "":
-            scenery_img = pygame.image.load(map_data['scenery-img']).convert()
+            scenery_img = pygame.image.load(map_data['scenery-img']).convert_alpha()
 
             if map_data['scenery-fill-y']:
                 h = scenery_img.get_height()
