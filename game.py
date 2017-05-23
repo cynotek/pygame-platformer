@@ -219,6 +219,9 @@ class Character(Entity):
                 self.rect.top = block.rect.bottom
                 self.vy = 0
 
+        if self.rect.y > 10 * GRID_SIZE:
+            self.hearts = 0
+
     def process_coins(self, coins):
         hit_list = pygame.sprite.spritecollide(self, coins, True)
 
