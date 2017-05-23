@@ -186,7 +186,7 @@ class Character(Entity):
                 self.vx = 0
 
         self.on_ground = False
-        self.rect.y += self.vy
+        self.rect.y += self.vy + 1 # the +1 is hacky. not sure why it helps.
         hit_list = pygame.sprite.spritecollide(self, blocks, False)
 
         for block in hit_list:
@@ -329,7 +329,7 @@ class Enemy(Entity):
                 self.rect.left = block.rect.right
                 self.reverse()
 
-        self.rect.y += self.vy
+        self.rect.y += self.vy # the +1 is hacky. not sure why it helps.
         hit_list = pygame.sprite.spritecollide(self, blocks, False)
 
         for block in hit_list:
@@ -404,7 +404,7 @@ class Monster(Enemy):
                 self.rect.left = block.rect.right
                 self.reverse()
 
-        self.rect.y += self.vy
+        self.rect.y += self.vy + 1 # the +1 is hacky. not sure why it helps.
         hit_list = pygame.sprite.spritecollide(self, blocks, False)
 
         reverse = True
