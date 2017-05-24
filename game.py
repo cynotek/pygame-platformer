@@ -91,10 +91,12 @@ coin_img = load_image("assets/Items/coinGold.png")
 heart_img = load_image("assets/HUD/hudHeart_full.png")
 heart_empty_img = load_image("assets/HUD/hudHeart_empty.png")
 oneup_img = load_image("assets/Items/gemBlue.png")
-flag_img = load_image("assets/Items/flagBlue1.png")
-flagpole_img = load_image("assets/Items/flagBlue1.png")  # My asset pack didn't come with a flag pole :(
 soundon_img = load_image("assets/HUD/hudJewel_blue.png")
 soundoff_img = load_image("assets/HUD/hudJewel_blue_empty.png")
+signExit = load_image("assets/Tiles/signExit.png")
+
+hudPlayer_blue = load_image("assets/HUD/hudPlayer_blue.png")
+hudX = load_image("assets/HUD/hudX.png")
 
 Bee_img1 = load_image("assets/Enemies/bee.png")
 Bee_img2 = load_image("assets/Enemies/bee_move.png")
@@ -528,15 +530,9 @@ class Level():
             x, y = item[0] * GRID_SIZE, item[1] * GRID_SIZE
             self.starting_powerups.append(Heart(x, y, heart_img))
 
-        for i, item in enumerate(map_data['flag']):
+        for i, item in enumerate(map_data['signExit']):
             x, y = item[0] * GRID_SIZE, item[1] * GRID_SIZE
-
-            if i == 0:
-                img = flag_img
-            else:
-                img = flagpole_img
-
-            self.starting_flag.append(Flag(x, y, img))
+            self.starting_flag.append(Flag(x, y, signExit))
 
         self.background_layer = pygame.Surface([self.width, self.height], pygame.SRCALPHA, 32)
         self.scenery_layer = pygame.Surface([self.width, self.height], pygame.SRCALPHA, 32)
@@ -694,9 +690,11 @@ class Game():
     def display_stats(self, surface):
         global sound_on
 
-        lives_text = FONT_SM.render("Lives: " + str(self.hero.lives), 1, WHITE)
+        hudnum = load_image("assets/HUD/hud{}.png".format(self.hero.lives))
+        
+        
         score_text = FONT_SM.render("Score: " + str(self.hero.score), 1, WHITE)
-        lvl_score = FONT_SM.render(self.level.name, 1, WHITE)
+        lvl_name = FONT_SM.render(self.level.name, 1, WHITE)
 
         # Music status icon
         if sound_on:
@@ -705,10 +703,14 @@ class Game():
             surface.blit(soundoff_img, (32, 128))
 
         surface.blit(score_text, (WIDTH - score_text.get_width() - 32, 32))
-        surface.blit(lives_text, (32, 64))
-        surface.blit(lvl_score, (32, 96))
+        surface.blit(lvl_name, (32, 32 * 6))
 
-        # Manages heart counter
+        # Lives counter
+        surface.blit(hudPlayer_blue, (32, 64))
+        surface.blit(hudX, (32 * 3, 64))
+        surface.blit(hudnum, (32 * 5, 64))
+
+        # Heart counter
         spacing = 32
         curr_max = self.hero.max_hearts * 2
         multi = [i for i in range(1, curr_max, 2)]
