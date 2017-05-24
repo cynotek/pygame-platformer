@@ -69,6 +69,7 @@
 - Animate a scenery element such as clouds or flickering torches. (This is probably best accomplished by creating another layer that scrolls along with the background or scenery layer rather than trying to blit directly on one of those layers.)
 - Create a foreground layer. The foreground layer should scroll at the same speed as the active layer. However, the player should run behind items on the foreground layer (perhaps tufts of grass or trees). Rather than use an image for the background like the scenery and background layers, draw items using grid items in the same manner as blocks, coins, etc. Just be sure to treat it like the inactive layer. Don't update it each iteration fot he game loop. The foreground layer should be purely decorative like the scenery and background layers. It is not necessary to make the hero interact with any items in the foreground.
 - Utilize vertical scrolling in a level. You'll need to modify the calculate_offset function to get vertical scrolling to work.
+- Create a Warp object in the game that transports the player instantly to another part of the level. Warps should be declared in the level.json file and indicate both the location of the warp item and the location that the player will warp to. (A four-element list would work well for this.) Make the warp either a necessary part of solving a level or a way for a player to get otherwise unreachable prizes. Don't try to make two-way warps. One-way will be much easier.
 
 ### Very hard
 
