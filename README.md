@@ -12,6 +12,8 @@
 - Find your own custom artwork for blocks.
 - Find your own custom artwork for the hero.
 - Find your own custom artwork for enemies.
+- Create your own custom artwork for one unanimated entity in the game. Blocks and entities that only flip when they change directions are considered unanimated. http://www.piskelapp.com/ is a good site for this.
+- Create your own custom artwork for at least three unanimated entities in the game.
 - Find your own fonts.
 - Find your own sound effects.
 - Find your own theme music.
@@ -23,14 +25,15 @@
 - Make power-ups give points to the player.
 - Make a bad item which takes points away from the player.
 - Add a prize other than a coin and give it a point value.
-- If you kill enemies (in the 'Hard' section), award different point values based on the type of enemy killed.
 - Display hearts/max rather than just hearts.
 - Update the display_stats function so that it shows the name of the current level.
-- Add a victory sound that plays when the game is won.
+- Add a victory sound that plays when the game is won. This should play instead of the normal end-of-level sound.
+- If you kill enemies (in the 'Hard' section), award different point values based on the type of enemy killed.
 
 ### Medium
 
-- Create your own custom artwork. http://www.piskelapp.com/ is a good site for this.
+- Create your own custom artwork for one animated entity in the game. Entities that only flip when they change directions are not considered animated. Animation should include multiple frames such as when the hero runs. http://www.piskelapp.com/ is a good site for this.
+- Create your own custom artwork for at least three animated entities in the game.
 - Design a complex standard level. Your level should be at least 60 blocks long.
 - Create levels which takes place on a different planets. You can modify the gravity and terminal velocity in the level data to create the physics you want. (A gravity of less than 1 will make the world 'bouncier'.) Use space-themed backdrops for your levels. 
 - Create a game with at least 4 levels total. Levels should be significantly different in layout and each should be at least 60 block long.
@@ -65,7 +68,6 @@
 - Animate a scenery element such as clouds or flickering torches. (This is probably best accomplished by creating another layer that scrolls along with the background or scenery layer rather than trying to blit directly on one of those layers.)
 - Create a foreground layer. The foreground layer should scroll at the same speed as the active layer. However, the player should run behind items on the foreground layer (perhaps tufts of grass or trees). Rather than use an image for the background like the scenery and background layers, draw items using grid items in the same manner as blocks, coins, etc. Just be sure to treat it like the inactive layer. Don't update it each iteration fot he game loop. The foreground layer should be purely decorative like the scenery and background layers. It is not necessary to make the hero interact with any items in the foreground.
 - Utilize vertical scrolling in a level. You'll need to modify the calculate_offset function to get vertical scrolling to work.
-
 
 ### Very hard
 - Add ladders to the game. If a player is on a ladder, don't apply gravity. Assign vy by player input instead. Also disable jumping while on a ladder. You should use animated climbing images too.
