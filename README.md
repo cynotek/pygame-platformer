@@ -93,7 +93,3 @@ Use game.py file to create a platformer game. Points will be awarded for each fe
 - Super hard: 25 points each
 
 This project will count as two major assessments. When you reach 100 points, you can show me your work to get credit for the first assessment. Then continue adding more features to earn points toward your second major assessment. There are over 600 points available, so you should have plenty of options for earning points, either by choosing to complete many easy features or fewer difficult features.
-
-## Final Exam
-
-Your exam requires creating a website to show of your game and writing a brief description of one feature you implemented in your game and an explanation of how the code for that feature works. Detailed instructions and template have been posted in Google Classroom.
