@@ -14,7 +14,7 @@
 - ~~Find your own fonts.~~
 - Find your own sound effects.
 - ~~Find your own theme music for a level.~~
-- Use different theme music for each level you make.
+- ~~Use different theme music for each level you make.~~
 - ~~Customize the background layer for a level.~~
 - ~~Customize the scenery layer for a level.~~
 - Create a custom splash screen that does more than just show the name of the game.

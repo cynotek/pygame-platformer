@@ -196,6 +196,9 @@ class Character(Entity):
         elif self.rect.right > level.width:
             self.rect.right = level.width
 
+        if self.rect.y > 10 * GRID_SIZE:
+            self.hearts = 0
+
     def move_and_process_blocks(self, blocks):
         self.rect.x += self.vx
         hit_list = pygame.sprite.spritecollide(self, blocks, False)
@@ -220,9 +223,6 @@ class Character(Entity):
             elif self.vy < 0:
                 self.rect.top = block.rect.bottom
                 self.vy = 0
-
-        if self.rect.y > 10 * GRID_SIZE:
-            self.hearts = 0
 
     def process_coins(self, coins):
         hit_list = pygame.sprite.spritecollide(self, coins, True)
@@ -690,9 +690,6 @@ class Game():
     def display_stats(self, surface):
         global sound_on
 
-        hudnum = load_image("assets/HUD/hud{}.png".format(self.hero.lives))
-        
-        
         score_text = FONT_SM.render("Score: " + str(self.hero.score), 1, WHITE)
         lvl_name = FONT_SM.render(self.level.name, 1, WHITE)
 
@@ -708,16 +705,18 @@ class Game():
         # Lives counter
         surface.blit(hudPlayer_blue, (32, 64))
         surface.blit(hudX, (32 * 3, 64))
-        surface.blit(hudnum, (32 * 5, 64))
+        if self.hero.lives <= 9:
+            hudnum = load_image("assets/HUD/hud{}.png".format(self.hero.lives))
+            surface.blit(hudnum, (32 * 5, 64))
+        else:
+            self.hero.lives = 9 # Max lives is 9 because I said so
 
         # Heart counter
         spacing = 32
         curr_max = self.hero.max_hearts * 2
         multi = [i for i in range(1, curr_max, 2)]
-
         for i in multi:
             surface.blit(heart_empty_img, (spacing * i, 0))
-
         for i in multi[:self.hero.hearts]:
             surface.blit(heart_img, (spacing * i, 0))
 
