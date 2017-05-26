@@ -14,7 +14,7 @@
 - ~~Find your own fonts.~~
 - ~~Find your own sound effects.~~
 - ~~Find your own theme music for a level.~~
-- ~~Use different theme music for each level you make.~~
+- Use different theme music for each level you make.
 - ~~Customize the background layer for a level.~~
 - ~~Customize the scenery layer for a level.~~
 - Create a custom splash screen that does more than just show the name of the game.
@@ -22,7 +22,7 @@
 - ~~Change point value for coins.~~
 - ~~Make power-ups give points to the player.~~
 - ~~Make a bad item which takes points away from the player.~~
-- ~~Add a prize other than a coin and give it a point value.~~
+- Add a prize other than a coin and give it a point value.
 - ~~Display hearts/max rather than just hearts.~~
 - ~~Update the display_stats function so that it shows the name of the current level.~~
 - ~~Add a victory sound that plays when the game is won. This should play instead of the normal end-of-level sound.~~
