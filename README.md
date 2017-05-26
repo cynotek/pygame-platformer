@@ -12,20 +12,20 @@
 - Create your own custom artwork for one unanimated entity in the game. Blocks and entities that only flip when they change directions are not considered animated. http://www.piskelapp.com/ is a good site for this.
 - Create your own custom artwork for at least three unanimated entities in the game.
 - ~~Find your own fonts.~~
-- Find your own sound effects.
+- ~~Find your own sound effects.~~
 - ~~Find your own theme music for a level.~~
 - ~~Use different theme music for each level you make.~~
 - ~~Customize the background layer for a level.~~
 - ~~Customize the scenery layer for a level.~~
 - Create a custom splash screen that does more than just show the name of the game.
-- Improve the display_message function so that the text is in a box making it easier to read against the background.
+- ~~Improve the display_message function so that the text is in a box making it easier to read against the background.~~
 - ~~Change point value for coins.~~
-- Make power-ups give points to the player.
-- Make a bad item which takes points away from the player.
-- Add a prize other than a coin and give it a point value.
+- ~~Make power-ups give points to the player.~~
+- ~~Make a bad item which takes points away from the player.~~
+- ~~Add a prize other than a coin and give it a point value.~~
 - ~~Display hearts/max rather than just hearts.~~
 - ~~Update the display_stats function so that it shows the name of the current level.~~
-- Add a victory sound that plays when the game is won. This should play instead of the normal end-of-level sound.
+- ~~Add a victory sound that plays when the game is won. This should play instead of the normal end-of-level sound.~~
 - ~~If you kill enemies (in the 'Hard' section), award different point values based on the type of enemy killed.~~
 
 ### Medium
@@ -35,20 +35,20 @@
 - Design a complex standard level. Your level should be at least 60 blocks long.
 - Create levels which takes place on a different planets. You can modify the gravity and terminal velocity in the level data to create the physics you want. (A gravity of less than 1 will make the world 'bouncier'.) Use space-themed backdrops for your levels.
 - Create a game with at least 4 levels total. Levels should be significantly different in layout and each should be at least 60 block long.
-- Display lives in the format [character icon] x [number of lives].
+- ~~Display lives in the format [character icon] x [number of lives].~~
 - ~~Display actual hearts to show health. Show empty hearts when health is not full.~~
 - Let the 'S' key toggle sound effects (jump, get coin, etc.) on and off. Show a little speaker/mute icon with game stats to indicate the current state of sound effects.
 - ~~Let the 'M' key pause and unpause level theme music. Show a little note icon (crossed out or uncrossed) with game stats to indicate the current state of music.~~
-- Create invincibility (star) power-up. (The optional arguments on the play_sound function can help you match an invincibility sound length to the invincibility period.)
+- ~~Create invincibility (star) power-up. (The optional arguments on the play_sound function can help you match an invincibility sound length to the invincibility period.)~~
 - Invent your own power-up which lasts a limited amount of time or until the player hits an enemy or completes a level.
-- Add a falling image to your character animation.
+- ~~Add a falling image to your character animation.~~
 - Increase the max hearts a player can have when some milestone is achieved.
-- Track coins separately from the score. (They can still be worth points.) Give an extra life when a number of coins is earned. Reset the coin count after a life is given.
+- ~~Track coins separately from the score. (They can still be worth points.) Give an extra life when a number of coins is earned. Reset the coin count after a life is given.~~
 - Invent a "power-up" which has a negative consequence on a player other than reducing hearts, lives, or points.
 - ~~Put gaps in the blocks that run along the bottom of the level. Then make a player die when they fall through the bottom of the world. You'll need to make sure enemies that fall through are also removed from the game. Pygame's sprite.kill() function will be useful for this.~~
 - Make a credits screen for when the player wins the game.
-- Add a PAUSE stage to the game which is activated when the player presses 'p' (or a button on the joystick). All movement and time should stop during a pause stage. Pressing 'p' again should resume. Be sure to show a message indicating the game is paused.
-- Use a modifier key/button that makes you run faster (or perhaps jump higher) while the key/button is held.
+- ~~Add a PAUSE stage to the game which is activated when the player presses 'p' (or a button on the joystick). All movement and time should stop during a pause stage. Pressing 'p' again should resume. Be sure to show a message indicating the game is paused.~~
+- ~~Use a modifier key/button that makes you run faster (or perhaps jump higher) while the key/button is held.~~
 - Add a third parallax layer that scrolls at a different speed than the other layers. Be sure that closer layers always scroll faster than far away layers.
 - Create a custom enemy with unique behavior regarding movement.
 - Create cover art for your game. Save it as a PNG file. Print it in color and I'll post it in the room.

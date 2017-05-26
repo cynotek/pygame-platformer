@@ -21,7 +21,9 @@ sound_on = True
 # KB+M
 LEFT = pygame.K_a
 RIGHT = pygame.K_d
+SPRINT = pygame.K_LSHIFT
 MUTE = pygame.K_m
+PAUSE = pygame.K_p
 JUMP = pygame.K_SPACE
 
 # Levels
@@ -90,9 +92,12 @@ block_images = {"GL": load_image("assets/Ground/Grass/grassLeft.png"),
 coin_img = load_image("assets/Items/coinGold.png")
 heart_img = load_image("assets/HUD/hudHeart_full.png")
 heart_empty_img = load_image("assets/HUD/hudHeart_empty.png")
+ruby_img = load_image("assets/Items/gemRed.png")
+falsey_img = load_image("assets/Items/coinBronze.png")
+star_img = load_image("assets/Items/star.png")
 oneup_img = load_image("assets/Items/gemBlue.png")
-soundon_img = load_image("assets/HUD/hudJewel_blue.png")
-soundoff_img = load_image("assets/HUD/hudJewel_blue_empty.png")
+soundon_img = load_image("assets/soundon.png")
+soundoff_img = load_image("assets/soundoff.png")
 signExit = load_image("assets/Tiles/signExit.png")
 
 hudPlayer_blue = load_image("assets/HUD/hudPlayer_blue.png")
@@ -103,13 +108,13 @@ Bee_img2 = load_image("assets/Enemies/bee_move.png")
 Bee_images = [Bee_img1, Bee_img2]
 
 # Sounds
-# JUMP_SOUND = pygame.mixer.Sound("assets/sounds/jump.wav")
-# COIN_SOUND = pygame.mixer.Sound("assets/sounds/pickup_coin.wav")
-# POWERUP_SOUND = pygame.mixer.Sound("assets/sounds/powerup.wav")
-# HURT_SOUND = pygame.mixer.Sound("assets/sounds/hurt.ogg")
-# DIE_SOUND = pygame.mixer.Sound("assets/sounds/death.wav")
-# LEVELUP_SOUND = pygame.mixer.Sound("assets/sounds/level_up.wav")
-# GAMEOVER_SOUND = pygame.mixer.Sound("assets/sounds/game_over.wav")
+JUMP_SOUND = pygame.mixer.Sound("assets/Sounds/jump.wav")
+COIN_SOUND = pygame.mixer.Sound("assets/Sounds/pickup_coin.wav")
+POWERUP_SOUND = pygame.mixer.Sound("assets/Sounds/powerup.wav")
+HURT_SOUND = pygame.mixer.Sound("assets/Sounds/hurt.wav")
+DIE_SOUND = pygame.mixer.Sound("assets/Sounds/death.wav")
+LEVELUP_SOUND = pygame.mixer.Sound("assets/Sounds/level_up.wav")
+GAMEOVER_SOUND = pygame.mixer.Sound("assets/Sounds/game_over.wav")
 
 
 class Entity(pygame.sprite.Sprite):
@@ -163,6 +168,7 @@ class Character(Entity):
         self.on_ground = True
 
         self.score = 0
+        self.coin_score = 0
         self.lives = 3
         self.hearts = 3
         self.max_hearts = 3
@@ -186,7 +192,7 @@ class Character(Entity):
 
         if len(hit_list) > 0:
             self.vy = -self.jump_power
-            # play_sound(JUMP_SOUND)
+            play_sound(JUMP_SOUND)
 
         self.rect.y -= 1
 
@@ -212,7 +218,7 @@ class Character(Entity):
                 self.vx = 0
 
         self.on_ground = False
-        self.rect.y += self.vy + 1 # the +1 is hacky. not sure why it helps.
+        self.rect.y += self.vy + 1  # the +1 is hacky. not sure why it helps.
         hit_list = pygame.sprite.spritecollide(self, blocks, False)
 
         for block in hit_list:
@@ -227,9 +233,29 @@ class Character(Entity):
     def process_coins(self, coins):
         hit_list = pygame.sprite.spritecollide(self, coins, True)
 
+        if self.coin_score < 0:
+            self.coin_score = 0
+
         for coin in hit_list:
-            # play_sound(COIN_SOUND)
-            self.score += coin.value
+            play_sound(COIN_SOUND)
+            self.coin_score += coin.value
+
+    def process_falseys(self, falseys):
+        hit_list = pygame.sprite.spritecollide(self, falseys, True)
+
+        for falsey in hit_list:
+            play_sound(COIN_SOUND)
+            self.score += falsey.value
+            self.coin_score += falsey.value
+
+    def process_stars(self, stars):
+        hit_list = pygame.sprite.spritecollide(self, stars, True)
+
+        for star in hit_list:
+            time = int(10 * FPS)
+            self.invincibility = time
+
+            play_sound(POWERUP_SOUND)
 
     def process_enemies(self, enemies):
         hit_list = pygame.sprite.spritecollide(self, enemies, False)
@@ -237,10 +263,11 @@ class Character(Entity):
         if len(hit_list) > 0 and self.invincibility == 0:
             if self.vy > 0:
                 [e.kill() for e in hit_list]
+                play_sound(COIN_SOUND)
                 self.score += 1  # temp value
                 self.vy = -self.jump_power
                 return
-            # play_sound(HURT_SOUND)
+            play_sound(HURT_SOUND)
             if self.vx > 0:  # right facing hit
                 self.rect.x += -self.jump_power
             elif self.vx < 0:  # left facing hit
@@ -252,7 +279,7 @@ class Character(Entity):
         hit_list = pygame.sprite.spritecollide(self, powerups, True)
 
         for p in hit_list:
-            # play_sound(POWERUP_SOUND)
+            play_sound(POWERUP_SOUND)
             p.apply(self)
 
     def check_flag(self, level):
@@ -260,7 +287,7 @@ class Character(Entity):
 
         if len(hit_list) > 0:
             level.completed = True
-            # play_sound(LEVELUP_SOUND)
+            play_sound(LEVELUP_SOUND)
 
     def set_image(self):
         if self.on_ground:
@@ -281,7 +308,12 @@ class Character(Entity):
                 else:
                     self.image = self.image_idle_left
         else:
-            if self.facing_right:
+            if self.vy > 0:
+                if self.facing_right:
+                    self.image = self.image_hit_right
+                else:
+                    self.image = self.image_hit_left
+            elif self.facing_right:
                 self.image = self.image_jump_right
             else:
                 self.image = self.image_jump_left
@@ -290,11 +322,9 @@ class Character(Entity):
         self.lives -= 1
 
         if self.lives > 0:
-            pass
-            # play_sound(DIE_SOUND)
+            play_sound(DIE_SOUND)
         else:
-            pass
-            # play_sound(GAMEOVER_SOUND)
+            play_sound(GAMEOVER_SOUND)
 
     def respawn(self, level):
         self.rect.x = level.start_x
@@ -312,6 +342,8 @@ class Character(Entity):
 
         if self.hearts > 0:
             self.process_coins(level.coins)
+            self.process_falseys(level.falseys)
+            self.process_stars(level.stars)
             self.process_powerups(level.powerups)
             self.check_flag(level)
 
@@ -325,7 +357,26 @@ class Coin(Entity):
     def __init__(self, x, y, image):
         super().__init__(x, y, image)
 
-        self.value = 5
+        self.value = 1
+
+
+class Ruby(Entity):
+    def __init__(self, x, y, image):
+        super().__init__(x, y, image)
+
+        self.value = 10
+
+
+class Falsey(Entity):
+    def __init__(self, x, y, image):
+        super().__init__(x, y, image)
+
+        self.value = -5
+
+
+class Star(Entity):
+    def __init__(self, x, y, image):
+        super().__init__(x, y, image)
 
 
 class Enemy(Entity):
@@ -368,7 +419,7 @@ class Enemy(Entity):
                 self.rect.left = block.rect.right
                 self.reverse()
 
-        self.rect.y += self.vy # the +1 is hacky. not sure why it helps.
+        self.rect.y += self.vy  # the +1 is hacky. not sure why it helps.
         hit_list = pygame.sprite.spritecollide(self, blocks, False)
 
         for block in hit_list:
@@ -432,7 +483,7 @@ class Bee(Enemy):
                 self.rect.left = block.rect.right
                 self.reverse()
 
-        self.rect.y += self.vy + 1 # the +1 is hacky. not sure why it helps.
+        self.rect.y += self.vy + 1  # the +1 is hacky. not sure why it helps.
         hit_list = pygame.sprite.spritecollide(self, blocks, False)
 
         reverse = True
@@ -462,6 +513,7 @@ class OneUp(Entity):
 
     def apply(self, character):
         character.lives += 1
+        self.value = 5
 
 
 class Heart(Entity):
@@ -484,12 +536,16 @@ class Level():
         self.starting_blocks = []
         self.starting_enemies = []
         self.starting_coins = []
+        self.starting_falseys = []
+        self.starting_stars = []
         self.starting_powerups = []
         self.starting_flag = []
 
         self.blocks = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
         self.coins = pygame.sprite.Group()
+        self.falseys = pygame.sprite.Group()
+        self.stars = pygame.sprite.Group()
         self.powerups = pygame.sprite.Group()
         self.flag = pygame.sprite.Group()
 
@@ -521,6 +577,14 @@ class Level():
         for item in map_data['coins']:
             x, y = item[0] * GRID_SIZE, item[1] * GRID_SIZE
             self.starting_coins.append(Coin(x, y, coin_img))
+
+        for item in map_data['falseys']:
+            x, y = item[0] * GRID_SIZE, item[1] * GRID_SIZE
+            self.starting_coins.append(Falsey(x, y, falsey_img))
+
+        for item in map_data['stars']:
+            x, y = item[0] * GRID_SIZE, item[1] * GRID_SIZE
+            self.starting_stars.append(Star(x, y, star_img))
 
         for item in map_data['oneups']:
             x, y = item[0] * GRID_SIZE, item[1] * GRID_SIZE
@@ -590,6 +654,8 @@ class Level():
         self.blocks.add(self.starting_blocks)
         self.enemies.add(self.starting_enemies)
         self.coins.add(self.starting_coins)
+        self.falseys.add(self.starting_falseys)
+        self.stars.add(self.starting_stars)
         self.powerups.add(self.starting_powerups)
         self.flag.add(self.starting_flag)
 
@@ -613,10 +679,11 @@ class Level():
 
     def reset(self):
         self.enemies.add(self.starting_enemies)
-        self.coins.add(self.starting_coins)
+        self.falseys.add(self.starting_falseys)
+        self.stars.add(self.starting_stars)
         self.powerups.add(self.starting_powerups)
 
-        self.active_sprites.add(self.coins, self.enemies, self.powerups)
+        self.active_sprites.add(self.coins, self.enemies, self.powerups, self.stars, self.falseys)
 
         for e in self.enemies:
             e.reset()
@@ -663,7 +730,7 @@ class Game():
 
     def display_splash(self, surface):
         line1 = FONT_LG.render(TITLE, 1, DARK_BLUE)
-        line2 = FONT_SM.render("Press any key to start.", 1, WHITE)
+        line2 = FONT_SM.render("Press any key to start.", 1, DARK_BLUE)
 
         x1 = WIDTH / 2 - line1.get_width() / 2
         y1 = HEIGHT / 3 - line1.get_height() / 2
@@ -675,8 +742,8 @@ class Game():
         surface.blit(line2, (x2, y2))
 
     def display_message(self, surface, primary_text, secondary_text):
-        line1 = FONT_MD.render(primary_text, 1, WHITE)
-        line2 = FONT_SM.render(secondary_text, 1, WHITE)
+        line1 = FONT_MD.render(primary_text, 1, DARK_BLUE)
+        line2 = FONT_SM.render(secondary_text, 1, DARK_BLUE)
 
         x1 = WIDTH / 2 - line1.get_width() / 2
         y1 = HEIGHT / 3 - line1.get_height() / 2
@@ -684,14 +751,16 @@ class Game():
         x2 = WIDTH / 2 - line2.get_width() / 2
         y2 = y1 + line1.get_height() + 16
 
+        pygame.draw.rect(surface, WHITE, (x2, y1, line2.get_width(), line1.get_height() * 2))
         surface.blit(line1, (x1, y1))
         surface.blit(line2, (x2, y2))
 
     def display_stats(self, surface):
         global sound_on
 
-        score_text = FONT_SM.render("Score: " + str(self.hero.score), 1, WHITE)
-        lvl_name = FONT_SM.render(self.level.name, 1, WHITE)
+        score_text = FONT_SM.render("Score: " + str(self.hero.score), 1, DARK_BLUE)
+        coin_score_text = FONT_SM.render("Coins: " + str(self.hero.coin_score), 1, DARK_BLUE)
+        lvl_name = FONT_SM.render(self.level.name, 1, DARK_BLUE)
 
         # Music status icon
         if sound_on:
@@ -700,7 +769,8 @@ class Game():
             surface.blit(soundoff_img, (32, 128))
 
         surface.blit(score_text, (WIDTH - score_text.get_width() - 32, 32))
-        surface.blit(lvl_name, (32, 32 * 6))
+        surface.blit(coin_score_text, (WIDTH - score_text.get_width() - 32, 64))
+        surface.blit(lvl_name, (WIDTH - lvl_name.get_width() - 32, 96))
 
         # Lives counter
         surface.blit(hudPlayer_blue, (32, 64))
@@ -709,7 +779,7 @@ class Game():
             hudnum = load_image("assets/HUD/hud{}.png".format(self.hero.lives))
             surface.blit(hudnum, (32 * 5, 64))
         else:
-            self.hero.lives = 9 # Max lives is 9 because I said so
+            self.hero.lives = 9  # Max lives is 9 because I said so
 
         # Heart counter
         spacing = 32
@@ -759,9 +829,12 @@ class Game():
                         else:
                             sound_on = True
                             play_music()
+                    if event.key == PAUSE:
+                        self.stage = Game.PAUSED
 
                 elif self.stage == Game.PAUSED:
-                    pass
+                    if event.key == PAUSE:
+                        self.stage = Game.PLAYING
 
                 elif self.stage == Game.LEVEL_COMPLETED:
                     self.advance()
@@ -787,7 +860,10 @@ class Game():
                     self.hero.move_left()
                 elif pressed[RIGHT]:
                     self.hero.move_right()
+                elif pressed[SPRINT]:
+                    self.hero.speed = 10
                 else:
+                    self.hero.speed = 5
                     self.hero.stop()
 
     def update(self):
@@ -841,7 +917,7 @@ class Game():
         elif self.stage == Game.START:
             self.display_message(self.window, "Ready?!!!", "Press any key to start.")
         elif self.stage == Game.PAUSED:
-            pass
+            self.display_message(self.window, "Paused", "________________")
         elif self.stage == Game.LEVEL_COMPLETED:
             self.display_message(self.window, "Level Complete", "Press any key to continue.")
         elif self.stage == Game.VICTORY:
