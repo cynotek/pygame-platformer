@@ -805,9 +805,12 @@ class Game():
                     elif self.stage == Game.PLAYING:
                         if event.button == xbox360_controller.A:
                             self.hero.jump(self.level.blocks)
+                        elif event.button == xbox360_controller.START:
+                            self.stage = Game.PAUSED
 
                     elif self.stage == Game.PAUSED:
-                        pass
+                        if event.button == xbox360_controller.START:
+                            self.stage = Game.PLAYING
 
                     elif self.stage == Game.LEVEL_COMPLETED:
                         self.advance()
@@ -845,6 +848,7 @@ class Game():
                         self.reset()
 
         if self.gamepad:
+            pressed = self.gamepad.get_buttons()
             self.left_x, self.left_y = self.gamepad.get_left_stick()
             self.right_x, self.right_y = self.gamepad.get_right_stick()
             if self.stage == Game.PLAYING:
@@ -854,6 +858,11 @@ class Game():
                     self.hero.move_right()
                 else:
                     self.hero.stop()
+                if pressed[xbox360_controller.B]:
+                    self.hero.speed = 10
+                else:
+                    self.hero.speed = 5
+
         elif self.gamepad is None:
             pressed = pygame.key.get_pressed()
             if self.stage == Game.PLAYING:
@@ -861,11 +870,12 @@ class Game():
                     self.hero.move_left()
                 elif pressed[RIGHT]:
                     self.hero.move_right()
-                elif pressed[SPRINT]:
+                else:
+                    self.hero.stop()
+                if pressed[SPRINT]:
                     self.hero.speed = 10
                 else:
                     self.hero.speed = 5
-                    self.hero.stop()
 
     def update(self):
         if self.stage == Game.PLAYING:
