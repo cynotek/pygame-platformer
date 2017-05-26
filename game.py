@@ -679,6 +679,7 @@ class Level():
 
     def reset(self):
         self.enemies.add(self.starting_enemies)
+        self.coins.add(self.starting_coins)
         self.falseys.add(self.starting_falseys)
         self.stars.add(self.starting_stars)
         self.powerups.add(self.starting_powerups)
