@@ -15,12 +15,19 @@ Simply download the zip, extract it anywhere, and run `game.py` by either doube 
 Clear each level by gathering coins, killing enemies by jumping on them, and finally reaching the exit sign.
 
 ### Controls
+## Keyboard
 - A: Move left
 - D: Move right
 - Space: Jump
 - Shift: Sprint
 - M: Mute music
 - P: Pause game
+
+##Controller
+- A: Jump
+- B: Sprint
+- Start: Pause
+- Left stick: Move left and right
 
 ### Items
 - Gold coin: Increases coin point by 1.
