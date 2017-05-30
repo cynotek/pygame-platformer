@@ -23,7 +23,7 @@ Clear each level by gathering coins, killing enemies by jumping on them, and fin
 - M: Mute music
 - P: Pause game
 
-##Controller
+## Controller
 - A: Jump
 - B: Sprint
 - Start: Pause
