@@ -84,8 +84,6 @@
 
 Use game.py file to create a platformer game. Points will be awarded for each feature as follows:
 
-- Current points: 125
-
 - Easy: 5 points each
 - Medium: 10 points each
 - Hard: 15 points each
