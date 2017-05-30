@@ -15,17 +15,17 @@ Simply download the zip, extract it anywhere, and run `game.py` by either doube 
 Clear each level by gathering coins, killing enemies by jumping on them, and finally reaching the exit sign.
 
 ### Controls
-A: Move left
-D: Move right
-Space: Jump
-Shift: Sprint
-M: Mute music
-P: Pause game
+- A: Move left
+- D: Move right
+- Space: Jump
+- Shift: Sprint
+- M: Mute music
+- P: Pause game
 
 ### Items
-Gold coin: Increases coin point by 1.
-Bronze coin: Decreases coin point by 5.
-Star: Temporary invincibility.
-Blue gem: Adds extra life.
-Heart: Adds extra heart.
-Wasp: Getting hit deducts one heart, killing earns 1 generic point.
+- Gold coin: Increases coin point by 1.
+- Bronze coin: Decreases coin point by 5.
+- Star: Temporary invincibility.
+- Blue gem: Adds extra life.
+- Heart: Adds extra heart.
+- Wasp: Getting hit deducts one heart, killing earns 1 generic point.
