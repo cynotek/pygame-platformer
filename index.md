@@ -31,5 +31,5 @@ Clear each level by gathering coins, killing enemies by jumping on them, and fin
 - Wasp: Getting hit deducts one heart, killing earns 1 generic point.
 
 ## Screenshots
-![Screenshot](screenshot1.png)
-![Screenshot](screenshot2.png)
+![Screenshot](screenshot1.PNG)
+![Screenshot](screenshot2.PNG)
